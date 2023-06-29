@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png">
+  <img width="256" height="256" src="logo.png">
 </p>
 
 <h1 align="center">project-checklist</h1>
