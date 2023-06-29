@@ -1,4 +1,6 @@
-<img align="center" width="100" height="100" src="logo.png">
+<p align="center">
+  <img width="460" height="300" src="logo.png">
+</p>
 
 <h1 align="center">project-checklist</h1>
 <h3 align="center">A checklist of things to do before releasing your project</h3>
