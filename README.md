@@ -22,10 +22,10 @@
 - [ ] Handle $? which should expand to the exit status of the most recently executed foreground pipeline.
 - [ ] Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
   - [ ] ◦ ctrl-C displays a new prompt on a new line.
-  - [ ] ◦ ctrl-D exits the shell.
+  - [x] ◦ ctrl-D exits the shell.
   - [ ] ◦ ctrl-\ does nothing.
 - [ ] builtins:
-  - [ ] ◦ echo with option -n
+  - [x] ◦ echo with option -n
   - [ ] ◦ cd with only a relative or absolute path
   - [x] ◦ pwd with no options
   - [ ] ◦ export with no options
