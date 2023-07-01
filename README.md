@@ -13,8 +13,8 @@
 - [ ] Handle ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence.
 - [ ] Handle " (double quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence except for $ (dollar sign).
 - [ ] Implement redirections:
-  - [~] ◦ < should redirect input.
-  - [~] ◦ > should redirect output.
+  - [ ] ◦ < should redirect input.
+  - [ ] ◦ > should redirect output.
   - [ ] ◦ << Heredoc. However, it doesn’t have to update the history!
   - [ ] ◦ >> should redirect output in append mode.
 - [ ] Implement pipes (| character). The output of each command in the pipeline is connected to the input of the next command via a pipe.
@@ -23,7 +23,7 @@
 - [ ] Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
   - [ ] ◦ ctrl-C displays a new prompt on a new line.
   - [x] ◦ ctrl-D exits the shell.
-  - [ ] ◦ ctrl-\ does nothing.
+  - [x] ◦ ctrl-\ does nothing.
 - [ ] builtins:
   - [x] ◦ echo with option -n
   - [ ] ◦ cd with only a relative or absolute path
