@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:01:56 by jchamak           #+#    #+#             */
-/*   Updated: 2023/06/29 18:12:06 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/04 16:15:02 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	pipes(char *const *argv, char **envp, t_all *all)
 		close(all->p[1]);
 		dup2(all->p[0], 0);
 		//free(all->path);
+		all->pid = getpid();
 		waitpid(j, NULL, 0);
 	}
 }
@@ -118,8 +119,11 @@ void	final_pipe(char *const *argv, char **envp, t_all *all)
 	else
 	{
 		close(all->p[1]);
+/* 		printf("- %d\n", all->pid);
+		kill (all->pid, 0);
+		all->pid = getpid();
+		printf("-- %d\n", all->pid); */
 		waitpid(j, NULL, 0);
-		//sleep(100);
 	}
 }
 
@@ -130,12 +134,17 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 	char		*his;
 
 	i = 0;
+	//waitpid(all->pid, NULL, 0);
 	his = readline("minishell > ");
-	all->pid = getpid();
-	while (!his)
-		wait(0);
-	add_history(his);
-	all->recep = ft_split(his, ' ');
+	if (his == NULL)
+		exit(0);
+	//all->pid = getpid();
+/* 	while (!his)
+		his = readline(""); */
+	printf("%s\n", his);
+	if (his[0])
+		add_history(his);
+	all->recep = ft_split(his, '|');
 	remain(all, argc, argv, envp);
 /* 	while (all->recep[i])
 	{
@@ -149,7 +158,7 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 {
 	int		i;
 
-	i = 0;
+	i = -1;
 	all->i = 0;
 /* 	if (strcmp(argv[1], "/dev/urandom") == 0)
 		ft_exit(0); */
@@ -160,12 +169,12 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 		ft_exit(127);
 	dup2(all->infile, 0);
 	dup2(all->outfile, 1); */
-	pipes(argv, envp, all);
-	while (all->recep[++ i])
+	//pipes(argv, envp, all);
+	while (all->recep[++ i + 1])
 		pipes(argv, envp, all);
 	final_pipe(argv, envp, all);
-	//arg_fill(argv, envp, all);
-	//execve(all->path, (char *const *) all->commands, envp);
+//	arg_fill(argv, envp, all);
+//	execve(all->path, (char *const *) all->commands, envp);
 	return (0);
 }
 
