@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:01:56 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/05 14:28:09 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/05 19:52:55 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ int	where(char **envp, t_all *all)
 	i = 0;
 	while (ft_strncmp("PATH", *envp, 4))
 		envp ++;
-/* 	if (all->where)
-		free (all->where); */
+	if (all->where)
+		free (all->where);
 	all->where = ft_split(envp[0] + 5, ':');
 	while (all->where[i])
 	{
 		temp = ft_strjoin(all->where[i], "/");
-	//	free(all->where[i]);
+		free(all->where[i]);
 		all->where[i] = ft_strjoin(temp, all->commands[0]);
 		if (access(all->where[i], F_OK) == 0)
 		{
@@ -90,8 +90,7 @@ void	pipes(char *const *argv, char **envp, t_all *all)
 	{
 		close(all->p[1]);
 		dup2(all->p[0], 0);
-		//free(all->path);
-		//all->pid = getpid();
+	//	free(all->path);
 		waitpid(j, NULL, 0);
 	}
 }
@@ -114,10 +113,7 @@ void	final_pipe(char *const *argv, char **envp, t_all *all)
 	else
 	{
 		close(all->p[1]);
-/* 		printf("- %d\n", all->pid);
-		kill (all->pid, 0);
-		all->pid = getpid();
-		printf("-- %d\n", all->pid); */
+		free(all->path);
 		waitpid(j, NULL, 0);
 	}
 }
@@ -129,25 +125,46 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 	char		*his;
 
 	i = 0;
-	//waitpid(all->pid, NULL, 0);
 	dup2(1, 0);
 	his = readline("minishell > ");
 	if (his == NULL)
 		exit(0);
-	//all->pid = getpid();
-/* 	while (!his)
-		his = readline(""); */
-	printf("%s\n", his);
 	if (his[0])
 		add_history(his);
 	all->recep = ft_split(his, '|');
 	remain(all, argc, argv, envp);
-/* 	while (all->recep[i])
-	{
-		//printf("%s\n", all->recep[i]);
-		i ++;
-	} */
 	free(his);
+}
+
+void heretype(t_all *all, char *end)
+{
+	int		i;
+	int		j;
+	char	*his;
+
+	i = 0;
+	j = 0;
+	pipe(all->p);
+	while (j == 0)
+	{
+	//	dup2(all->p[0], 1);
+	//	dup2(all->p[1], 0);
+		dup2(0, all->p[1]);
+		his = readline("heredoc> ");
+		if (strcmp (his, end) == 0)
+		{
+			j ++;
+			dup2(all->p[0], 0);
+		}
+		else
+		{
+			//dup2(all->p[0], 0);
+			//all->herebuf[i] = his; //
+		//	printf("%s\n", his);
+		}
+		i ++;
+	}
+//	dup2(all->p[0], 0); //
 }
 
 int	remain(t_all *all, int argc, char **argv, char **envp)
@@ -156,24 +173,25 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 
 	i = 0;
 	all->i = 0;
+	char *end = "eof";
 /* 	if (strcmp(argv[1], "/dev/urandom") == 0)
 		ft_exit(0); */
 	all->where = NULL;
-/* 	all->infile = open (argv[1], O_RDONLY, 0666);
-	all->outfile = open (argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0666);
-	if (all->outfile <= 0 || all->infile <= 0)
-		ft_exit(127);
-	dup2(all->infile, 0);
-	dup2(all->outfile, 1); */
-	//pipes(argv, envp, all);
+//	if (all->heredoc > 0)
+	//	heretype(all, end);
+//	all->infile = open ("file", O_RDONLY, 0666);
+//	all->infile = open (argv[1], O_RDONLY, 0666);
+//	all->outfile = open (argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0666);
+/* 	if (all->outfile <= 0 || all->infile <= 0)
+		ft_exit(127); */
+//	dup2(all->infile, 0);
+//	dup2(all->outfile, 1);
 	while (all->recep[i + 1])
 	{
 		pipes(argv, envp, all);
 		i ++;
 	}
 	final_pipe(argv, envp, all);
-//	arg_fill(argv, envp, all);
-//	execve(all->path, (char *const *) all->commands, envp);
 	return (0);
 }
 
@@ -186,7 +204,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_all	all;
 
-	//atexit(ft_leaks);
+//	atexit(ft_leaks);
 	all.commands = NULL;
 	while (1)
 		prompt(&all, argc, argv, envp);
