@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:01:56 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/04 16:15:02 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/05 14:28:09 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,11 @@ void	arg_fill(char *const *argv, char	**envp, t_all *all)
 	int	i;
 
 	i = 0;
-/* 	if (all->commands)
-		free (all->commands); */
+	if (all->commands)
+		free (all->commands);
 	if (all->recep[all->i])
 	{
 		all->commands = ft_split(all->recep[all->i], ' ');
-/* 		while (all->commands[i])
-		{
-			printf("command %s\n", all->commands[i]);
-			i ++;
-		} */
 		where(envp, all);
 		all->i ++;
 	}
@@ -96,7 +91,7 @@ void	pipes(char *const *argv, char **envp, t_all *all)
 		close(all->p[1]);
 		dup2(all->p[0], 0);
 		//free(all->path);
-		all->pid = getpid();
+		//all->pid = getpid();
 		waitpid(j, NULL, 0);
 	}
 }
@@ -135,6 +130,7 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 
 	i = 0;
 	//waitpid(all->pid, NULL, 0);
+	dup2(1, 0);
 	his = readline("minishell > ");
 	if (his == NULL)
 		exit(0);
@@ -158,7 +154,7 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 {
 	int		i;
 
-	i = -1;
+	i = 0;
 	all->i = 0;
 /* 	if (strcmp(argv[1], "/dev/urandom") == 0)
 		ft_exit(0); */
@@ -170,8 +166,11 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 	dup2(all->infile, 0);
 	dup2(all->outfile, 1); */
 	//pipes(argv, envp, all);
-	while (all->recep[++ i + 1])
+	while (all->recep[i + 1])
+	{
 		pipes(argv, envp, all);
+		i ++;
+	}
 	final_pipe(argv, envp, all);
 //	arg_fill(argv, envp, all);
 //	execve(all->path, (char *const *) all->commands, envp);
