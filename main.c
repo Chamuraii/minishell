@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:01:56 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/05 19:52:55 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/06 19:44:10 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,20 +136,15 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 	free(his);
 }
 
-void heretype(t_all *all, char *end)
+void heredoc(t_all *all, char *end)
 {
-	int		i;
 	int		j;
 	char	*his;
 
-	i = 0;
 	j = 0;
 	pipe(all->p);
 	while (j == 0)
 	{
-	//	dup2(all->p[0], 1);
-	//	dup2(all->p[1], 0);
-		dup2(0, all->p[1]);
 		his = readline("heredoc> ");
 		if (strcmp (his, end) == 0)
 		{
@@ -158,13 +153,12 @@ void heretype(t_all *all, char *end)
 		}
 		else
 		{
-			//dup2(all->p[0], 0);
-			//all->herebuf[i] = his; //
-		//	printf("%s\n", his);
+			write(all->p[1], his, ft_strlen(his));
+			write(all->p[1], "\n", 2);
 		}
-		i ++;
 	}
-//	dup2(all->p[0], 0); //
+	dup2(all->p[0], 0);
+	close(all->p[1]);
 }
 
 int	remain(t_all *all, int argc, char **argv, char **envp)
@@ -178,10 +172,11 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 		ft_exit(0); */
 	all->where = NULL;
 //	if (all->heredoc > 0)
-	//	heretype(all, end);
+//	heredoc(all, end);
 //	all->infile = open ("file", O_RDONLY, 0666);
 //	all->infile = open (argv[1], O_RDONLY, 0666);
 //	all->outfile = open (argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0666);
+//	all->outfile = open ("file7", O_RDWR | O_TRUNC | O_CREAT, 0666);
 /* 	if (all->outfile <= 0 || all->infile <= 0)
 		ft_exit(127); */
 //	dup2(all->infile, 0);
