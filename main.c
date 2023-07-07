@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:01:56 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/06 19:44:10 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/07 14:29:08 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ void	pipes(char *const *argv, char **envp, t_all *all)
 	{
 		close(all->p[1]);
 		dup2(all->p[0], 0);
-	//	free(all->path);
+		if (all->path)
+			free(all->path);
 		waitpid(j, NULL, 0);
 	}
 }
@@ -106,6 +107,7 @@ void	final_pipe(char *const *argv, char **envp, t_all *all)
 	else if (j == 0)
 	{
 		close(all->p[0]);
+		dup2(all->outfile, 1); //
 		if (all->path)
 			execve(all->path, (char *const *) all->commands, envp);
 		ft_exit(127);
@@ -113,7 +115,9 @@ void	final_pipe(char *const *argv, char **envp, t_all *all)
 	else
 	{
 		close(all->p[1]);
-		free(all->path);
+		dup2(all->p[0], 0);
+		if (all->path)
+			free(all->path);
 		waitpid(j, NULL, 0);
 	}
 }
@@ -133,7 +137,8 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 		add_history(his);
 	all->recep = ft_split(his, '|');
 	remain(all, argc, argv, envp);
-	free(his);
+	if (his)
+		free(his);
 }
 
 void heredoc(t_all *all, char *end)
@@ -176,11 +181,10 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 //	all->infile = open ("file", O_RDONLY, 0666);
 //	all->infile = open (argv[1], O_RDONLY, 0666);
 //	all->outfile = open (argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0666);
-//	all->outfile = open ("file7", O_RDWR | O_TRUNC | O_CREAT, 0666);
+	all->outfile = open ("file7", O_RDWR | O_TRUNC | O_CREAT, 0666);
 /* 	if (all->outfile <= 0 || all->infile <= 0)
 		ft_exit(127); */
 //	dup2(all->infile, 0);
-//	dup2(all->outfile, 1);
 	while (all->recep[i + 1])
 	{
 		pipes(argv, envp, all);
