@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:01:56 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/07 14:29:08 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/10 11:23:13 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	ft_exit(int status)
 	write(2, strerror(status), strlen(strerror(status)));
 	write(2, "\n", 1);
 	exit(status);
+//	return (status);
 }
 
 /* WHERE : finds and tests possible paths, keeps the good one in all->path */
@@ -129,6 +130,9 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 	char		*his;
 
 	i = 0;
+/* 	if (chdir("libft/") != 0)
+		ft_exit(errno); */
+//	printf("PATH : %s\n", getenv("PATH"));
 	dup2(1, 0);
 	his = readline("minishell > ");
 	if (his == NULL)
@@ -181,7 +185,8 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 //	all->infile = open ("file", O_RDONLY, 0666);
 //	all->infile = open (argv[1], O_RDONLY, 0666);
 //	all->outfile = open (argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0666);
-	all->outfile = open ("file7", O_RDWR | O_TRUNC | O_CREAT, 0666);
+//	all->outfile = open ("file7", O_RDWR | O_TRUNC | O_CREAT, 0666);
+//	all->outfile = open ("file7", O_RDWR | O_APPEND | O_CREAT, 0666);
 /* 	if (all->outfile <= 0 || all->infile <= 0)
 		ft_exit(127); */
 //	dup2(all->infile, 0);
