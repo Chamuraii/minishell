@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:43:40 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/05 16:37:27 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/10 11:38:55 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_all
 	int		outfile;
 	int		heredoc;
 	int		pid;
+	int		error;
 	int		p[2];
 	int		i;
 }			t_all;

@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 09:01:56 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/10 11:23:13 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/10 15:24:09 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ int		remain(t_all *all, int argc, char **argv, char **envp);
 
 /* FT_EXIT : used to exit, manages errors */
 
-int	ft_exit(int status)
+int	ft_exit(int status, t_all *all)
 {
 	write(2, strerror(status), strlen(strerror(status)));
 	write(2, "\n", 1);
-	exit(status);
-//	return (status);
+	all->error = status;
+//	exit(status);
+	return (status);
 }
 
 /* WHERE : finds and tests possible paths, keeps the good one in all->path */
@@ -78,14 +79,14 @@ void	pipes(char *const *argv, char **envp, t_all *all)
 	pipe(all->p);
 	j = fork();
 	if (j == -1)
-		ft_exit(errno);
+		ft_exit(errno, all);
 	else if (j == 0)
 	{
 		close(all->p[0]);
 		dup2(all->p[1], 1);
 		if (all->path)
 			execve(all->path, (char *const *) all->commands, envp);
-		ft_exit(127);
+		ft_exit(127, all);
 	}
 	else
 	{
@@ -104,21 +105,21 @@ void	final_pipe(char *const *argv, char **envp, t_all *all)
 	pipe(all->p);
 	j = fork();
 	if (j == -1)
-		ft_exit(errno);
+		ft_exit(errno, all);
 	else if (j == 0)
 	{
 		close(all->p[0]);
-		dup2(all->outfile, 1); //
+	//	dup2(all->outfile, 1); //
 		if (all->path)
 			execve(all->path, (char *const *) all->commands, envp);
-		ft_exit(127);
+		ft_exit(127, all);
 	}
 	else
 	{
 		close(all->p[1]);
 		dup2(all->p[0], 0);
-		if (all->path)
-			free(all->path);
+/* 		if (all->path)
+			free(all->path); */
 		waitpid(j, NULL, 0);
 	}
 }
@@ -131,8 +132,11 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 
 	i = 0;
 /* 	if (chdir("libft/") != 0)
-		ft_exit(errno); */
+		ft_exit(errno, all); */
 //	printf("PATH : %s\n", getenv("PATH"));
+	all->path = NULL;
+	all->where = NULL;
+	all->recep = NULL;
 	dup2(1, 0);
 	his = readline("minishell > ");
 	if (his == NULL)
@@ -140,7 +144,8 @@ void	prompt(t_all *all, int argc, char **argv, char **envp)
 	if (his[0])
 		add_history(his);
 	all->recep = ft_split(his, '|');
-	remain(all, argc, argv, envp);
+	if (all->recep)
+		remain(all, argc, argv, envp);
 	if (his)
 		free(his);
 }
@@ -178,7 +183,7 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 	all->i = 0;
 	char *end = "eof";
 /* 	if (strcmp(argv[1], "/dev/urandom") == 0)
-		ft_exit(0); */
+		ft_exit(0, all); */
 	all->where = NULL;
 //	if (all->heredoc > 0)
 //	heredoc(all, end);
@@ -188,7 +193,7 @@ int	remain(t_all *all, int argc, char **argv, char **envp)
 //	all->outfile = open ("file7", O_RDWR | O_TRUNC | O_CREAT, 0666);
 //	all->outfile = open ("file7", O_RDWR | O_APPEND | O_CREAT, 0666);
 /* 	if (all->outfile <= 0 || all->infile <= 0)
-		ft_exit(127); */
+		ft_exit(127, all); */
 //	dup2(all->infile, 0);
 	while (all->recep[i + 1])
 	{
