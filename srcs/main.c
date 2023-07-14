@@ -2,18 +2,9 @@
 
 t_all	g_all;
 
-void	ft_sigint_handler() // aiuda
-{
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
 int ft_readline()
 {
 	g_all.str = readline("minishell > ");
-
 	if (!g_all.str)
 	{
 		printf("exit\n");
@@ -33,32 +24,27 @@ int ft_readline()
 		printf("qvalidator failed\n");
 	//ft_builtins(g_all.str);
 	free(g_all.str);
+	for(int i = 0; g_all.array[i]; i++)
+		free(g_all.array[i]);
+	free(g_all.array);
 	return (0);
 }
 
-int main(int argc, char **argv, char **denv)
+/*
+void	ft_leaks()
+{
+	system("leaks -q minishell");
+}
+*/
+
+int main(int argc, char **argv, char **env)
 {
 	(void)argv;
 	(void)argc;
 
-	signal(SIGINT, ft_sigint_handler); 
-	signal(SIGQUIT, SIG_IGN);
+	ft_signals();
 	ft_var_init();
-	int i = 0;
-	while (denv[i])
-		i++;
-	g_all.env = (char **)ft_calloc(i + 1, sizeof(char *));
-	if (!g_all.env)
-		return (0);
-	int j = -1;
-	while (++j < i)
-		g_all.env[j] = ft_strdup(denv[j]);
-	j = -1;
-	while (++j < i)
-		ft_var_declare(g_all.env[j]);
+	ft_init_env(env);
 	while (1)
-	{
 		ft_readline();
-	}
-	return (0);
 }

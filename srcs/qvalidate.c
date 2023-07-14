@@ -26,106 +26,10 @@ int ft_quote_state(char c, int old_state)
 {
 	int state;
 
-	state = 0;
 	state = ft_dquote_state(c, old_state);
 	if (!state)
 		state = ft_squote_state(c, old_state);
 	return (state);
-}
-
-void	ft_rseparator(int state, char *str, int i)
-{
-	char *str2;
-	char *str3;
-
-	if (state == NQ)
-	{
-		if (!ft_strncmp(str + i, "|", 1))
-		{
-			str[i] = 0;
-			str2 = ft_strdup(str);
-			str3 = ft_strdup(str + i + 1);
-			if (i != 0)
-				if (str[i - 1] != 32 && str[i - 1] != '>')
-					str2 = ft_strjoin(str2, ft_strdup(" "));
-			str2 = ft_strjoin(str2, ft_strdup("|"));
-			if (str[i + 1] != 32)
-				str2 = ft_strjoin(str2, ft_strdup(" "));
-			if(str)
-				free(str);
-			str = ft_strjoin(str2, str3);
-		}
-		else if (!ft_strncmp(str + i, "<<", 2))
-		{
-			str[i] = 0;
-			str2 = ft_strdup(str);
-			str3 = ft_strdup(str + i + 2);
-			if (i != 0)
-				if (str[i - 1] != 32)
-					str2 = ft_strjoin(str2, ft_strdup(" "));
-			str2 = ft_strjoin(str2, ft_strdup("<<"));
-			if (str[i + 2] != 32)
-				str2 = ft_strjoin(str2, ft_strdup(" "));
-			free(str);
-			str = ft_strjoin(str2, str3);
-		}
-		else if (!ft_strncmp(str + i, ">>", 2))
-		{
-			str[i] = 0;
-			str2 = ft_strdup(str);
-			str3 = ft_strdup(str + i + 2);
-			if (i != 0)
-				if (str[i - 1] != 32)
-					str2 = ft_strjoin(str2, ft_strdup(" "));
-			str2 = ft_strjoin(str2, ft_strdup(">>"));
-			if (str[i + 2] != 32)
-				str2 = ft_strjoin(str2, ft_strdup(" "));
-			free(str);
-			str = ft_strjoin(str2, str3);
-		}
-		else if (!ft_strncmp(str + i, "<>", 2))
-		{
-			str[i] = 0;
-			str2 = ft_strdup(str);
-			str3 = ft_strdup(str + i + 2);
-			if (i != 0)
-				if (str[i - 1] != 32)
-					str2 = ft_strjoin(str2, ft_strdup(" "));
-			str2 = ft_strjoin(str2, ft_strdup("<>"));
-			if (str[i + 2] != 32)
-				str2 = ft_strjoin(str2, ft_strdup(" "));
-			free(str);
-			str = ft_strjoin(str2, str3);
-		}
-		else if (!ft_strncmp(str + i, "<", 1))
-		{
-			str[i] = 0;
-			str2 = ft_strdup(str);
-			str3 = ft_strdup(str + i + 1);
-			if (i != 0)
-				if (str[i - 1] != 32 && str[i - 1] != '<')
-					str2 = ft_strjoin(str2, ft_strdup(" "));
-			str2 = ft_strjoin(str2, ft_strdup("<"));
-			if (str[i + 1] != 32 && str[i + 1] != '<' && str[i + 1] != '>')
-				str2 = ft_strjoin(str2, ft_strdup(" "));
-			free(str);
-			str = ft_strjoin(str2, str3);
-		}
-		else if (!ft_strncmp(str + i, ">", 1))
-		{
-			str[i] = 0;
-			str2 = ft_strdup(str);
-			str3 = ft_strdup(str + i + 1);
-			if (i != 0)
-				if (str[i - 1] != 32 && str[i - 1] != '>' && str[i - 1] != '<')
-					str2 = ft_strjoin(str2, ft_strdup(" "));
-			str2 = ft_strjoin(str2, ft_strdup(">"));
-			if (str[i + 1] != 32 && str[i + 1] != '>' && str[i + 1] != '|')
-				str2 = ft_strjoin(str2, ft_strdup(" "));
-			free(str);
-			str = ft_strjoin(str2, str3);
-		}
-	}
 }
 
 void	ft_expander_val(char *str, int i)

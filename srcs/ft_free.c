@@ -18,3 +18,9 @@ void	ft_free()
 	}
 	free(g_all.varlist);
 }
+
+void	ft_error_messages()
+{
+	printf("Error message\n");
+	exit(0);
+}
