@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "minishell",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "LIBFT::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-LIBFT-Debug-e7bd15d2ee22ebe83e3b.json",
+					"name" : "LIBFT",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MINISHELL::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MINISHELL-Debug-b2324789088f5b171914.json",
+					"name" : "MINISHELL",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "minishell::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-minishell-Debug-e31427b4aba55e16c21c.json",
+					"name" : "minishell",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/panesico/CLionProjects/minishell_parser/cmake-build-debug",
+		"source" : "/home/panesico/CLionProjects/minishell_parser"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

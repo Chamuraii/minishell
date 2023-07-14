@@ -1,0 +1,2 @@
+/usr/bin/ar qc libMINISHELL.a CMakeFiles/MINISHELL.dir/srcs/builtins.c.o CMakeFiles/MINISHELL.dir/srcs/export.c.o CMakeFiles/MINISHELL.dir/srcs/main.c.o CMakeFiles/MINISHELL.dir/srcs/qvalidate.c.o CMakeFiles/MINISHELL.dir/srcs/rvalidate.c.o CMakeFiles/MINISHELL.dir/srcs/to_double_pointer.c.o CMakeFiles/MINISHELL.dir/srcs/unset.c.o
+/usr/bin/ranlib libMINISHELL.a
