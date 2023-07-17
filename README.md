@@ -8,27 +8,27 @@
 - [x] Display a prompt when waiting for a new command.
 - [x] Have a working history.
 - [ ] Search and launch the right executable (based on the PATH variable or using a relative or an absolute path).
-- [ ] Not use more than one global variable.
-- [ ] Not interpret unclosed quotes or special characters which are not required by the subject such as \ or ;
-- [ ] Handle ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence.
-- [ ] Handle " (double quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence except for $ (dollar sign).
-- [ ] Implement redirections:
-  - [ ] ◦ < should redirect input.
-  - [ ] ◦ > should redirect output.
-  - [ ] ◦ << Heredoc. However, it doesn’t have to update the history!
-  - [ ] ◦ >> should redirect output in append mode.
+- [x] Not use more than one global variable.
+- [x] Not interpret unclosed quotes or special characters which are not required by the subject such as \ or ;
+- [x] Handle ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence.
+- [x] Handle " (double quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence except for $ (dollar sign).
+- [-] Implement redirections:
+  - [-] ◦ < should redirect input.
+  - [-] ◦ > should redirect output.
+  - [-] ◦ << Heredoc. However, it doesn’t have to update the history!
+  - [-] ◦ >> should redirect output in append mode.
 - [ ] Implement pipes (| character). The output of each command in the pipeline is connected to the input of the next command via a pipe.
-- [ ] Handle environment variables ($ followed by a sequence of characters) which should expand to their values.
+- [x] Handle environment variables ($ followed by a sequence of characters) which should expand to their values.
 - [ ] Handle $? which should expand to the exit status of the most recently executed foreground pipeline.
-- [ ] Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
-  - [ ] ◦ ctrl-C displays a new prompt on a new line.
+- [x] Handle ctrl-C, ctrl-D and ctrl-\ which should behave like in bash.
+  - [x] ◦ ctrl-C displays a new prompt on a new line.
   - [x] ◦ ctrl-D exits the shell.
   - [x] ◦ ctrl-\ does nothing.
 - [ ] builtins:
   - [x] ◦ echo with option -n
   - [ ] ◦ cd with only a relative or absolute path
   - [x] ◦ pwd with no options
-  - [ ] ◦ export with no options
-  - [ ] ◦ unset with no options
+  - [x] ◦ export with no options
+  - [x] ◦ unset with no options
   - [x] ◦ env with no options or arguments
-  - [ ] ◦ exit with no options
+  - [x] ◦ exit with no options
