@@ -34,13 +34,18 @@ int	ft_quote_state(char c, int old_state)
 
 int	ft_qvalidator_2(int state, char **str, int i)
 {
+	char *str2;
+	char *str3;
+
 	if ((state == DQI || state == SQI) && (*str)[i] == 32)
 		(*str)[i] = 20;
 	if ((*str)[i] < 0)
 	{
-		(*str)[i] = 20;
-		if ((*str)[i + 1] < 0)
-			(*str)[i + 1] = 32;
+		while ((*str)[i] < 0)
+			(*str)[i++] = 0;
+		str2 = ft_strdup((*str));
+		str3 = ft_strdup((*str) + i);
+		(*str) = ft_strjoin(str2, str3);
 	}
 	ft_rseparator(state, str, i);
 	if (state == NQ)

@@ -101,10 +101,10 @@ int			ft_qvalidator(char **str);
 int			ft_rvalidator(char **str, int i);
 void		ft_sigint_handler(int signal);
 void		ft_signals(void);
-char		*ft_change_str(char *str, const char *str2);
-char		*ft_expand(char *str);
-char		*ft_reassign(char *str);
-char		**to_double_pointer(char *str);
+char		*ft_change_str(char **str, const char *str2);
+char		*ft_expand(char **str);
+char		*ft_reassign(char **str);
+char		**to_double_pointer(char **str);
 void		ft_del_var(char *key);
 
 #endif
