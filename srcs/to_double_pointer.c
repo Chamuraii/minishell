@@ -7,7 +7,7 @@ char	*ft_change_str(char **str, const char *str2)
 	free((*str));
 	if (!str2)
 		return (0);
-	str2 = strdup(str2);
+	str2 = ft_strdup(str2);
 	return ((char *) str2);
 }
 
@@ -69,12 +69,6 @@ char	**to_double_pointer(char **str)
 	while (array[i])
 	{
 		array[i] = ft_reassign(&(array[i]));
-		i++;
-	}
-	i = 0;
-	while (array[i])
-	{
-		printf("%s\n", array[i]);
 		i++;
 	}
 	return (array);

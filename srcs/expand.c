@@ -57,7 +57,7 @@ int	ft_var_declare(char *str)
 		return (0);
 	aux = str[i];
 	str[i] = 0;
-	key = strdup(str);
+	key = ft_strdup(str);
 	str[i] = aux;
 	ward = ++i;
 	while (str[i])
@@ -80,7 +80,7 @@ char	*ft_get_var(char *key)
 		key_len++;
 	head = g_all.var_list[0];
 	if (!head)
-		return (strdup(""));
+		return (ft_strdup(""));
 	while (head)
 	{
 		if (!strncmp(key, head->key, key_len))
@@ -88,5 +88,5 @@ char	*ft_get_var(char *key)
 				return (ft_strdup(head->value));
 		head = head->next;
 	}
-	return (strdup(""));
+	return (ft_strdup(""));
 }
