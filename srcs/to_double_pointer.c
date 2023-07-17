@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-extern t_all g_all;
+extern t_all	g_all;
 
 char	*ft_change_str(char *str, const char *str2)
 {
@@ -12,48 +12,14 @@ char	*ft_change_str(char *str, const char *str2)
 	return ((char *) str2);
 }
 
-char *ft_remove_19(char *str)
-{
-	int	i;
-	int j;
-	char	*str2;
-
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		while (str[i] && str[i] != 19)
-		{
-			i++;
-			j++;
-		}
-		if (str[i])
-			i++;
-	}
-	str2 = (char *)malloc(j + 1);
-	if (!str2)
-		return (0);
-	i = 0;
-	str2[j] = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] != 19)
-			str2[j++] = str[i];
-		i++;
-	}
-	free (str);
-	return (str2);
-}
-
-char *ft_expand(char *str)
+char	*ft_expand(char *str)
 {
 	int		i;
 	char	*str2;
-	char 	aux;
+	char	aux;
 
 	i = 0;
-	while (str[i] != '\20')
+	while (str[i] != '$')
 		i++;
 	i++;
 	aux = str[i - 1];
@@ -83,15 +49,13 @@ char	*ft_reassign(char *str)
 	{
 		if (str[i] == 20)
 			str[i] = 32;
-		if (str[i] == 19)
+		if (str[0] != SQ)
 		{
-			str = ft_remove_19(str);
-			i = 0;
-		}
-		if (str[i] == '\20')
-		{
-			str = ft_expand(str);
-			i = 0;
+			if (str[i] == '$')
+			{
+				str = ft_expand(str);
+				i = 0;
+			}
 		}
 		i++;
 	}
@@ -100,8 +64,8 @@ char	*ft_reassign(char *str)
 
 char	**to_double_pointer(char *str)
 {
-	int	i;
-	char **array;
+	int		i;
+	char	**array;
 
 	i = 0;
 	array = ft_split(str, ' ');

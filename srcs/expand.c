@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-extern t_all g_all;
+extern t_all	g_all;
 
 t_varlist	*ft_create_node(char *key, char *value)
 {
@@ -15,25 +15,23 @@ t_varlist	*ft_create_node(char *key, char *value)
 	return (varlist);
 }
 
-void ft_add_var(char *key, char *value)
+void	ft_add_var(char *key, char *value)
 {
 	t_varlist	*head;
 	t_varlist	*head2;
 
-	head = *g_all.varlist;
+	head = g_all.var_list[0];
 	if (!head)
 	{
-		*g_all.varlist = ft_create_node(key, value);
-		free(key);
-		free(value);
+		g_all.var_list[0] = ft_create_node(key, value);
+		ft_free_2(key, value);
 		return ;
 	}
 	while (head)
 	{
 		if (!strcmp(key, head->key))
 		{
-			free(head->value);
-			free(key);
+			ft_free_2(head->value, key);
 			head->value = value;
 			return ;
 		}
@@ -41,20 +39,19 @@ void ft_add_var(char *key, char *value)
 		head = head->next;
 	}
 	head2->next = ft_create_node(key, value);
-	free(key);
-	free(value);
+	ft_free_2(key, value);
 }
 
-int ft_var_declare(char *str)
+int	ft_var_declare(char *str)
 {
-	int i;
-	int ward;
+	int		i;
+	int		ward;
 	char	*key;
-	char 	*value;
-	char 	aux;
+	char	*value;
+	char	aux;
 
 	i = 0;
-	while (str[i]&& str[i] != '=')
+	while (str[i] && str[i] != '=')
 		i++;
 	if (str[i] != '=')
 		return (0);
@@ -76,12 +73,12 @@ int ft_var_declare(char *str)
 char	*ft_get_var(char *key)
 {
 	t_varlist	*head;
-	int 		key_len;
+	int			key_len;
 
 	key_len = 0;
 	while (ft_isalnum(key[key_len]))
 		key_len++;
-	head = g_all.varlist[0];
+	head = g_all.var_list[0];
 	if (!head)
 		return (strdup(""));
 	while (head)

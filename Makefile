@@ -1,7 +1,7 @@
 # Nombre del programa
 NAME       = minishell
 # Flags de compilacion
-FLAGS      = -Wall -Wextra -Werror -g
+FLAGS      = -Wall -Wextra -Werror -g -MD
 # Directorios
 SRC_DIR    = ./srcs/
 OBJ_DIR    = ./obj/
@@ -16,7 +16,9 @@ OBJ        = $(addprefix $(OBJ_DIR),$(OBJ_FILES))
 LIBFT      = $(addprefix $(LIBFT_DIR),libft.a)
 
 BREW_LIB = "/Users/$(USER)/.brew/opt/readline/lib"
-BREW_INCLUDE = "/Users/$(USER)/.brew/opt/readline/include"
+BREW_INCLUDE = "/Users/$(USER)/.brew/opt/readline/include/readline"
+
+-include $(OBJ_FILES:.o=.d)
 
 # Se compila el archivo binario (ejecutable).
 all: obj $(LIBFT) $(NAME)
@@ -32,7 +34,7 @@ $(LIBFT):
 # Se compila los objetos con las librerías y archivos
 $(NAME): $(OBJ)
 	@echo "(ﾉ◕ヮ◕)ﾉ*:・ﾟ✧ Compilando, espere unos segundos..."
-	@gcc $(OBJ) -o $(NAME) $(LIBFT) -lreadline
+	@gcc $(OBJ) -o $(NAME) $(LIBFT) -L /Users/$(USER)/.brew/opt/readline/lib -I /Users/$(USER)/.brew/opt/readline/include/readline -lreadline
 	@echo "(•̀ᴗ•́)و $(NAME) generado!"
 # Remueve todos los archivos objetos
 clean:
