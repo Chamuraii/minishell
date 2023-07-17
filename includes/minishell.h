@@ -11,19 +11,19 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-#include "../libft/libft.h"
+# include "../libft/libft.h"
 # include <signal.h>
-#include <curses.h>
-#include <term.h>
+# include <curses.h>
+# include <term.h>
 
 //hacer lista
 
-# define NQ  0
+# define NQ		0
 
-# define DQ  34
-# define DQO 1
-# define DQI 2
-# define DQC 3
+# define DQ		34
+# define DQO	1
+# define DQI	2
+# define DQC	3
 
 # define SQ  39
 # define SQO 4
@@ -37,23 +37,21 @@ typedef struct s_all
 {
 	//parser
 	char				*str;
-	char 				**array;
+	char				**array;
 	char				**env;
-	struct	s_varlist	**var_list;
-	struct	s_varlist	**exported_list;
+	struct s_varlist	**var_list;
+	struct s_varlist	**exported_list;
 	//pipex
-    char    			**commands;
-    char    			**recep;
-    char    			**where;
-    char    			*path;
-    int     			infile;
-    int     			outfile;
-    int     			pid;
-    int     			p[2];
-    int     			i;
-
-
-}           t_all;
+	char				**commands;
+	char				**recep;
+	char				**where;
+	char				*path;
+	int					infile;
+	int					outfile;
+	int					pid;
+	int					p[2];
+	int					i;
+}	t_all;
 
 typedef struct s_varlist
 {
@@ -75,12 +73,12 @@ t_varlist	*ft_create_node_exp(char *key, char *value);
 void		ft_add_var_exp(char *key, char *value);
 int			ft_var_declare_exp(char *str);
 char		*ft_get_var_exp(char *key);
-void		ft_free();
+void		ft_free(void);
 void		ft_free_2(void *var1, void *var2);
-void		ft_error_messages();
-void		ft_var_init();
+void		ft_error_messages(void);
+void		ft_var_init(void);
 void		ft_init_env(char **denv);
-int			ft_readline();
+int			ft_readline(void);
 void		ft_rseparator_1(char **str, int i);
 void		ft_rseparator_2(char **str, int i);
 void		ft_rseparator_3(char **str, int i);
