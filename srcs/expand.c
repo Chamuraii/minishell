@@ -42,31 +42,30 @@ void	ft_add_var(char *key, char *value)
 	ft_free_2(key, value);
 }
 
+
+
 int	ft_var_declare(char *str)
 {
 	int		i;
-	int		ward;
+	char 	*str2;
 	char	*key;
 	char	*value;
-	char	aux;
 
+	str2 = ft_strdup(str);
 	i = 0;
-	while (str[i] && str[i] != '=')
+	while (str2[i] && str2[i] != '=')
 		i++;
-	if (str[i] != '=')
+	if (str2[i] != '=')
 		return (0);
-	aux = str[i];
-	str[i] = 0;
-	key = ft_strdup(str);
-	str[i] = aux;
-	ward = ++i;
-	while (str[i])
-		i++;
-	aux = str[i];
-	str[i] = 0;
-	value = ft_strdup(str + ward);
-	str[i] = aux;
+	str2[i] = 0;
+	key = ft_strdup(str2);
+	++i;
+	value = ft_remove_quotes(str2 + i);
+	if (ft_find_var_exp(key))
+		ft_add_var_exp(ft_strdup(key), ft_strdup(value));
 	ft_add_var(key, value);
+	if (ft_get_var_exp(key))
+	free(str2);
 	return (1);
 }
 

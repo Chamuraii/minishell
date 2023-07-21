@@ -4,28 +4,23 @@ t_all	g_all;
 
 int	ft_readline(void)
 {
-	int		i;
-	char	*str;
-
-	str = readline("minishell > ");
-	if (!str)
+	g_all.rl_str = ft_strdup("minishell@$USER$ ");
+	g_all.rl_str = ft_expand(&(g_all.rl_str));
+	g_all.str = readline(g_all.rl_str);
+	if (!g_all.rl_str)
 	{
 		printf("exit\n");
-		ft_free();
+		ft_free("exit");
 		exit(0);
 	}
-	if (str[0])
-		add_history(str);
-	if (ft_qvalidator(&str))
-		g_all.array = to_double_pointer(&str);
+	if (g_all.str[0])
+		add_history(g_all.str);
+	if (ft_qvalidator(&(g_all.str)))
+		g_all.array = to_double_pointer(&(g_all.str));
 	else
-		return (free(str), printf("validator failed\n"));
+		return (free(g_all.str), printf("validator failed\n"));
 	ft_builtins(g_all.array);
-	free(str);
-	i = 0;
-	while (g_all.array[i])
-		free(g_all.array[i++]);
-	free(g_all.array);
+	ft_free("no exit");
 	return (0);
 }
 
@@ -44,5 +39,5 @@ int	main(int argc, char **argv, char **env)
 	ft_init_env(env);
 	while (1)
 		ft_readline();
-	ft_free();
+	ft_free("exit");
 }

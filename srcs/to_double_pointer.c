@@ -25,14 +25,14 @@ char	*ft_expand(char **str)
 	(*str)[i - 1] = 0;
 	str2 = ft_strjoin(ft_strdup((*str)), ft_get_var((*str) + i));
 	(*str)[i - 1] = aux;
-	while (ft_isalnum((*str)[i]) || (*str)[i] == '\023' || (*str)[i] == '\024')
+	while (ft_isalnum((*str)[i]))
 		i++;
+	free((*str));
 	(*str) = ft_strjoin(str2, ft_strdup((*str) + i));
-	free ((*str));
 	return ((*str));
 }
 
-char	*ft_reassign(char **str)
+char	*ft_reassign(char **str, char *next_str)
 {
 	int	i;
 
@@ -41,7 +41,6 @@ char	*ft_reassign(char **str)
 		ft_change_str(str, ">");
 	if (!ft_strcmp((*str), "<>"))
 		ft_change_str(str, "<");
-	ft_var_declare((*str));
 	while (str[i])
 	{
 		if ((*str)[i] == 20)
@@ -56,6 +55,8 @@ char	*ft_reassign(char **str)
 		}
 		i++;
 	}
+	if (!next_str)
+		ft_var_declare((*str));
 	return ((*str));
 }
 
@@ -68,7 +69,7 @@ char	**to_double_pointer(char **str)
 	array = ft_split((*str), ' ');
 	while (array[i])
 	{
-		array[i] = ft_reassign(&(array[i]));
+		array[i] = ft_reassign(&(array[i]), array[i + 1]);
 		i++;
 	}
 	return (array);

@@ -13,14 +13,14 @@ void	ft_var_init(void)
 	g_all.var_list = (t_varlist **)malloc(sizeof(t_varlist *));
 	if (!g_all.var_list)
 	{
-		printf("ERROR, not enough memory\n");
+		write(2, "ERROR, not enough memory\n", 25);
 		exit(0);
 	}
 	g_all.var_list[0] = 0;
 	g_all.exported_list = (t_varlist **)malloc(sizeof(t_varlist *));
 	if (!g_all.exported_list)
 	{
-		printf("ERROR, not enough memory\n");
+		write(2, "ERROR, not enough memory\n", 25);
 		exit(0);
 	}
 	g_all.exported_list[0] = 0;

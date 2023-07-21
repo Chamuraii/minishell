@@ -32,6 +32,9 @@
 
 // TODO
 //  ------
+//  When pressing TAB, do nothing.
+//  Talk with Jessica about how to parse the builtin output when redirects are present.
+//  Probar input ls aasd|"|"de chill
 
 typedef struct s_all
 {
@@ -41,6 +44,7 @@ typedef struct s_all
 	char				**env;
 	struct s_varlist	**var_list;
 	struct s_varlist	**exported_list;
+	char				*rl_str;
 	//pipex
 	char				**commands;
 	char				**recep;
@@ -61,7 +65,7 @@ typedef struct s_varlist
 }	t_varlist;
 
 int			ft_builtins(char **str);
-int			ft_builtin_1(void);
+int			ft_builtin_1(char **array, int i);
 int			ft_builtin_2(void);
 int			ft_builtin_3(char *str, char **array, int i);
 int			ft_builtin_4(char *str, char **array, int i);
@@ -73,7 +77,7 @@ t_varlist	*ft_create_node_exp(char *key, char *value);
 void		ft_add_var_exp(char *key, char *value);
 int			ft_var_declare_exp(char *str);
 char		*ft_get_var_exp(char *key);
-void		ft_free(void);
+void		ft_free(char *type);
 void		ft_free_2(void *var1, void *var2);
 void		ft_error_messages(void);
 void		ft_var_init(void);
@@ -101,8 +105,12 @@ void		ft_sigint_handler(int signal);
 void		ft_signals(void);
 char		*ft_change_str(char **str, const char *str2);
 char		*ft_expand(char **str);
-char		*ft_reassign(char **str);
+char		*ft_reassign(char **str, char *next_str);
 char		**to_double_pointer(char **str);
 void		ft_del_var(char *key);
+int			ft_is_p_or_r(char *str);
+int			ft_return_qstate(char *str, char *char_pos);
+char		*ft_remove_quotes(char *str);
+int			ft_find_var_exp(char *key);
 
 #endif

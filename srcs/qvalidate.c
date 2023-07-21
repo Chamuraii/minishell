@@ -39,6 +39,8 @@ int	ft_qvalidator_2(int state, char **str, int i)
 
 	if ((state == DQI || state == SQI) && (*str)[i] == 32)
 		(*str)[i] = 20;
+	else if (state == NQ && ft_isspace((*str)[i]))
+		(*str)[i] = 32;
 	if ((*str)[i] < 0)
 	{
 		while ((*str)[i] < 0)

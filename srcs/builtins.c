@@ -2,15 +2,18 @@
 
 extern t_all	g_all;
 
-int	ft_builtin_1(void)
+int	ft_builtin_1(char **array, int i)
 {
 	t_varlist	*head;
 
-	head = g_all.exported_list[0];
-	while (head)
+	if (ft_is_p_or_r(array[i]) || !array[i])
 	{
-		printf("%s=%s\n", head->key, head->value);
-		head = head->next;
+		head = g_all.exported_list[0];
+		while (head)
+		{
+			printf("%s=%s\n", head->key, head->value);
+			head = head->next;
+		}
 	}
 	return (1);
 }
@@ -55,14 +58,19 @@ int	ft_builtins(char **array)
 	while (array[i])
 	{
 		str = array[i++];
-		if (!ft_strncmp(str, "env", ft_strlen("env")))
-			return (ft_builtin_1());
-		else if (!ft_strncmp(str, "pwd", ft_strlen("pwd")))
+		if (!ft_strncmp(str, "env", ft_strlen("env") + 1) || !ft_strncmp(str, "ENV", ft_strlen("ENV") + 1))
+			return (ft_builtin_1(array, i));
+		else if (!ft_strncmp(str, "pwd", ft_strlen("pwd") + 1))
 			return (ft_builtin_2());
-		else if (!ft_strncmp(str, "export", ft_strlen("export")))
+		else if (!ft_strncmp(str, "export", ft_strlen("export") + 1))
 			return (ft_builtin_3(str, array, i));
-		else if (!ft_strncmp(str, "unset", ft_strlen("unset")))
+		else if (!ft_strncmp(str, "unset", ft_strlen("unset") + 1))
 			return (ft_builtin_4(str, array, i));
+		else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
+		{
+			ft_free("exit");
+			exit(0);
+		}
 	}
 	return (0);
 }

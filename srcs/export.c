@@ -90,3 +90,24 @@ char	*ft_get_var_exp(char *key)
 	}
 	return (ft_strdup(""));
 }
+
+int	ft_find_var_exp(char *key)
+{
+	t_varlist	*head;
+	int			key_len;
+
+	key_len = 0;
+	while (ft_isalnum(key[key_len]))
+		key_len++;
+	head = g_all.exported_list[0];
+	if (!head)
+		return (0);
+	while (head)
+	{
+		if (!strncmp(key, head->key, key_len))
+			if (!head->key[key_len])
+				return (1);
+		head = head->next;
+	}
+	return (0);
+}
