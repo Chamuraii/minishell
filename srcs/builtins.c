@@ -49,6 +49,19 @@ int	ft_builtin_4(char *str, char **array, int i)
 	return (1);
 }
 
+int	ft_builtin_5(char *str, char **array, int i)
+{
+	int cd_ret;
+
+	str = array[i];
+	if (!str)
+		return (0);
+	cd_ret = chdir(str);
+	if (!cd_ret)
+		ft_change_dir(str);
+	return (1);
+}
+
 int	ft_builtins(char **array)
 {
 	int		i;
@@ -66,6 +79,8 @@ int	ft_builtins(char **array)
 			return (ft_builtin_3(str, array, i));
 		else if (!ft_strncmp(str, "unset", ft_strlen("unset") + 1))
 			return (ft_builtin_4(str, array, i));
+		else if (!ft_strncmp(str, "cd", ft_strlen("cd") + 1))
+			return (ft_builtin_5(str, array, i));
 		else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
 		{
 			ft_free("exit");

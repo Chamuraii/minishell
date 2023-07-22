@@ -34,14 +34,16 @@ char	*ft_expand(char **str)
 
 char	*ft_reassign(char **str, char *next_str)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	if (!ft_strcmp((*str), ">|"))
 		ft_change_str(str, ">");
 	if (!ft_strcmp((*str), "<>"))
 		ft_change_str(str, "<");
-	while (str[i])
+	if (ft_is_p_or_r((*str) + 1))
+			(*str) = ft_remove_quotes_2(str);
+	while ((*str)[i])
 	{
 		if ((*str)[i] == 20)
 			(*str)[i] = 32;

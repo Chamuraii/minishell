@@ -4,7 +4,7 @@ t_all	g_all;
 
 int	ft_readline(void)
 {
-	g_all.rl_str = ft_strdup("minishell@$USER$ ");
+	g_all.rl_str = ft_strdup("$USER@minishell$ ");
 	g_all.rl_str = ft_expand(&(g_all.rl_str));
 	g_all.str = readline(g_all.rl_str);
 	if (!g_all.rl_str)
@@ -20,6 +20,9 @@ int	ft_readline(void)
 	else
 		return (free(g_all.str), printf("validator failed\n"));
 	ft_builtins(g_all.array);
+	int i = 0;
+	while (g_all.array[i])
+		printf("%s\n", g_all.array[i++]);
 	ft_free("no exit");
 	return (0);
 }

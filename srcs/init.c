@@ -30,6 +30,7 @@ void	ft_init_env(char **env)
 {
 	int	i;
 
+	g_all.env = env;
 	i = 0;
 	while (env[i])
 		ft_var_declare(env[i++]);

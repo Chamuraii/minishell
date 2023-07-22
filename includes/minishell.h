@@ -33,7 +33,7 @@
 // TODO
 //  ------
 //  When pressing TAB, do nothing.
-//  Talk with Jessica about how to parse the builtin output when redirects are present.
+//  queda poner las barras al cd
 //  Probar input ls aasd|"|"de chill
 
 typedef struct s_all
@@ -41,7 +41,7 @@ typedef struct s_all
 	//parser
 	char				*str;
 	char				**array;
-	char				**env;
+	char				**env; //stack
 	struct s_varlist	**var_list;
 	struct s_varlist	**exported_list;
 	char				*rl_str;
@@ -111,6 +111,8 @@ void		ft_del_var(char *key);
 int			ft_is_p_or_r(char *str);
 int			ft_return_qstate(char *str, char *char_pos);
 char		*ft_remove_quotes(char *str);
+char		*ft_remove_quotes_2(char **str);
 int			ft_find_var_exp(char *key);
+int			ft_change_dir(char *str);
 
 #endif
