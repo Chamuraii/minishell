@@ -2,7 +2,7 @@
 
 extern t_all	g_all;
 
-int	ft_builtin_1(char **array, int i)
+int	ft_builtin_env(char **array, int i)
 {
 	t_varlist	*head;
 
@@ -18,7 +18,7 @@ int	ft_builtin_1(char **array, int i)
 	return (1);
 }
 
-int	ft_builtin_2(void)
+int	ft_builtin_pwd(void)
 {
 	char	*pwd;
 
@@ -29,16 +29,18 @@ int	ft_builtin_2(void)
 	return (1);
 }
 
-int	ft_builtin_3(char *str, char **array, int i)
+int	ft_builtin_export(char *str, char **array, int i)
 {
 	str = array[i];
 	if (!str)
 		return (0);
+	if (!ft_search_var(ft_strdup(str)))
+		return (1);
 	ft_add_var_exp(ft_strdup(str), ft_get_var(ft_strdup(str)));
 	return (1);
 }
 
-int	ft_builtin_4(char *str, char **array, int i)
+int	ft_builtin_unset(char *str, char **array, int i)
 {
 	str = array[i];
 	if (!str)
@@ -46,19 +48,6 @@ int	ft_builtin_4(char *str, char **array, int i)
 	if (!ft_strncmp(str, "PWD", ft_strlen("PWD")))
 		ft_add_var_exp(ft_strdup("OLDPWD"), ft_strdup(ft_get_var_exp("PWD")));
 	ft_del_var(ft_strdup(str));
-	return (1);
-}
-
-int	ft_builtin_5(char *str, char **array, int i)
-{
-	int cd_ret;
-
-	str = array[i];
-	if (!str)
-		return (0);
-	cd_ret = chdir(str);
-	if (!cd_ret)
-		ft_change_dir(str);
 	return (1);
 }
 
@@ -72,15 +61,15 @@ int	ft_builtins(char **array)
 	{
 		str = array[i++];
 		if (!ft_strncmp(str, "env", ft_strlen("env") + 1) || !ft_strncmp(str, "ENV", ft_strlen("ENV") + 1))
-			return (ft_builtin_1(array, i));
+			return (ft_builtin_env(array, i));
 		else if (!ft_strncmp(str, "pwd", ft_strlen("pwd") + 1))
-			return (ft_builtin_2());
+			return (ft_builtin_pwd());
 		else if (!ft_strncmp(str, "export", ft_strlen("export") + 1))
-			return (ft_builtin_3(str, array, i));
+			return (ft_builtin_export(str, array, i));
 		else if (!ft_strncmp(str, "unset", ft_strlen("unset") + 1))
-			return (ft_builtin_4(str, array, i));
+			return (ft_builtin_unset(str, array, i));
 		else if (!ft_strncmp(str, "cd", ft_strlen("cd") + 1))
-			return (ft_builtin_5(str, array, i));
+			return (ft_builtin_cd(str, array, i));
 		else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
 		{
 			ft_free("exit");

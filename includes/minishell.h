@@ -32,9 +32,8 @@
 
 // TODO
 //  ------
-//  When pressing TAB, do nothing.
-//  queda poner las barras al cd
-//  Probar input ls aasd|"|"de chill
+//  When pressing TAB, do nothing.			Mirar si hacerlo
+//  export se ma roto :(
 
 typedef struct s_all
 {
@@ -65,10 +64,11 @@ typedef struct s_varlist
 }	t_varlist;
 
 int			ft_builtins(char **str);
-int			ft_builtin_1(char **array, int i);
-int			ft_builtin_2(void);
-int			ft_builtin_3(char *str, char **array, int i);
-int			ft_builtin_4(char *str, char **array, int i);
+int			ft_builtin_env(char **array, int i);
+int			ft_builtin_pwd(void);
+int			ft_builtin_export(char *str, char **array, int i);
+int			ft_builtin_unset(char *str, char **array, int i);
+int			ft_builtin_cd(char *str, char **array, int i);
 t_varlist	*ft_create_node(char *key, char *value);
 void		ft_add_var(char *key, char *value);
 int			ft_var_declare(char *str);
@@ -114,5 +114,7 @@ char		*ft_remove_quotes(char *str);
 char		*ft_remove_quotes_2(char **str);
 int			ft_find_var_exp(char *key);
 int			ft_change_dir(char *str);
+int			ft_is_p_or_r_between_quotes(char *str);
+int			ft_search_var(char *key);
 
 #endif

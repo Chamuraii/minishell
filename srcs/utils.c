@@ -19,6 +19,33 @@ int ft_is_p_or_r(char *str)
 	return (0);
 }
 
+int ft_is_p_or_r_between_quotes(char *str)
+{
+	if (!str)
+		return (0);
+	if (!ft_strncmp(str, "\"|\"", 4))
+		return (1);
+	if (!ft_strncmp(str, "\">\"", 4))
+		return (1);
+	if (!ft_strncmp(str, "\"<\"", 4))
+		return (1);
+	if (!ft_strncmp(str, "\">>\"", 5))
+		return (1);
+	if (!ft_strncmp(str, "\"<<\"", 5))
+		return (1);
+	if (!ft_strncmp(str, "\'|\'", 4))
+		return (1);
+	if (!ft_strncmp(str, "\'>\'", 4))
+		return (1);
+	if (!ft_strncmp(str, "\'<\'", 4))
+		return (1);
+	if (!ft_strncmp(str, "\'>>\'", 5))
+		return (1);
+	if (!ft_strncmp(str, "\'<<\'", 5))
+		return (1);
+	return (0);
+}
+
 int ft_return_qstate(char *str, char *char_pos)
 {
 	int	i;
@@ -87,7 +114,27 @@ char	*ft_remove_quotes_2(char **str)
 		if ((*str)[i] > 0)
 			str2[++j] = (*str)[i];
 	free(*str);
-	str2[i] = 0;
-	(*str) = str2;
-	return ((*str));
+	str2[++j] = 0;
+	return (str2);
+
+}
+
+int	ft_search_var(char *key)
+{
+	t_varlist	*head;
+
+	head = g_all.var_list[0];
+	if (!head)
+		return (0);
+	while (head)
+	{
+		if (!strcmp(key, head->key))
+		{
+			free(key);
+			return (1);
+		}
+		head = head->next;
+	}
+	free(key);
+	return (0);
 }

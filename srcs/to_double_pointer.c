@@ -41,7 +41,7 @@ char	*ft_reassign(char **str, char *next_str)
 		ft_change_str(str, ">");
 	if (!ft_strcmp((*str), "<>"))
 		ft_change_str(str, "<");
-	if (ft_is_p_or_r((*str) + 1))
+	if (!ft_is_p_or_r_between_quotes(*str))
 			(*str) = ft_remove_quotes_2(str);
 	while ((*str)[i])
 	{
