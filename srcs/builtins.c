@@ -96,7 +96,7 @@ int	ft_builtins(char **array)
 			return (ft_builtin_echo(str, array, i));
 		else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
 		{
-			//ft_free("exit");
+			ft_free("exit");
 			exit(0);
 		}
 		while (array[i] && ft_strcmp(array[i], "|"))

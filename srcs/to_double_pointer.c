@@ -27,7 +27,7 @@ char	*ft_expand(char **str)
 	(*str)[i - 1] = aux;
 	while (ft_isalnum((*str)[i]) || (*str)[i] == '?')
 		i++;
-	free((*str));
+	//free((*str));
 	(*str) = ft_strjoin(str2, ft_strdup((*str) + i));
 	return ((*str));
 }

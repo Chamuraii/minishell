@@ -2,25 +2,44 @@
 
 t_all	g_all;
 
+char	*ft_readline_str(void)
+{
+	char 	*str;
+	char	*str2;
+	char	*str3;
+	int		i;
+
+	str = ft_strdup("\033[0;35m$PWD\033[0;32m@\033"
+							 "[0;34mminishell\033[0;32m$ \033[1;97m");
+	str = ft_expand(&(str));
+	i = 0;
+	while (str[i] != '@')
+		i++;
+	while (str[i] != '/')
+		i--;
+	if (str[i + 1] != '\033')
+	{
+		str2 = ft_strdup(str + i + 1);
+		str3 = ft_strdup("$USER");
+		str3 = ft_expand(&str3);
+		if (!ft_strncmp(str2, str3, ft_strlen(str3)))
+		{
+			free(str2);
+			str2 = ft_strdup(str + i + ft_strlen(str3) + 1);
+			free(str3);
+			str2 = ft_strjoin(ft_strdup("~"), str2);
+			free(str);
+			str = ft_strjoin(ft_strdup("\033[0;35m"), str2);
+		}
+	}
+	return (str);
+}
+
 int	ft_readline(void)
 {
-	char *str2;
-	g_all.rl_str = ft_strdup("\033[0;35m$PWD\033[0;32m@\033"
-							 "[0;34mminishell\033[0;32m$ \033[1;97m");
-	g_all.rl_str = ft_expand(&(g_all.rl_str));
-	int i = 0;
-	while (g_all.rl_str[i] != '@')
-		i++;
-	while (g_all.rl_str[i] != '/')
-		i--;
-	if (g_all.rl_str[i + 1] != '\033')
-	{
-		str2 = ft_strdup(g_all.rl_str + i + 1);
-		free(g_all.rl_str);
-		g_all.rl_str = ft_strjoin(ft_strdup("\033[0;35m"), str2);
-	}
-	g_all.str = readline(g_all.rl_str);
-	if (!g_all.rl_str)
+	char	*str = ft_readline_str();
+	g_all.str = readline(str);
+	if (!g_all.str)
 	{
 		printf("exit\n");
 		//ft_free("exit");

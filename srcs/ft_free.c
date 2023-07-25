@@ -37,7 +37,6 @@ void	ft_free(char *type)
 	while (g_all.array[i])
 		free(g_all.array[i++]);
 	free(g_all.array);
-	free(g_all.rl_str);
 }
 
 void	ft_free_2(void *var1, void *var2)
