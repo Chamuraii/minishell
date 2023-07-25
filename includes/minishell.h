@@ -52,10 +52,18 @@ typedef struct s_all
 	char				**where;
 	char				*path;
 	int					infile;
+	int					is_infile;
 	int					outfile;
+	int					is_outfile;
+	int					error;
+	char				*eof_heredoc;
 	int					pid;
 	int					p[2];
 	int					i;
+	int					j;
+	int					size;
+	int					start_i;
+	int					end_i;
 }	t_all;
 
 typedef struct s_varlist
@@ -119,5 +127,6 @@ int			ft_find_var_exp(char *key);
 int			ft_change_dir(char *str);
 int			ft_is_p_or_r_between_quotes(char *str);
 int			ft_search_var(char *key);
+int			execute(void);
 
 #endif

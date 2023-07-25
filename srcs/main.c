@@ -31,6 +31,11 @@ char	*ft_readline_str(void)
 			free(str);
 			str = ft_strjoin(ft_strdup("\033[0;35m"), str2);
 		}
+		else
+		{
+			free(str);
+			str = ft_strjoin(ft_strdup("\033[0;35m"),str2);
+		}
 	}
 	return (str);
 }
