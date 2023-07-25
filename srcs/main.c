@@ -4,13 +4,26 @@ t_all	g_all;
 
 int	ft_readline(void)
 {
-	g_all.rl_str = ft_strdup("$USER@minishell$ ");
+	char *str2;
+	g_all.rl_str = ft_strdup("\033[0;35m$PWD\033[0;32m@\033"
+							 "[0;34mminishell\033[0;32m$ \033[1;97m");
 	g_all.rl_str = ft_expand(&(g_all.rl_str));
+	int i = 0;
+	while (g_all.rl_str[i] != '@')
+		i++;
+	while (g_all.rl_str[i] != '/')
+		i--;
+	if (g_all.rl_str[i + 1] != '\033')
+	{
+		str2 = ft_strdup(g_all.rl_str + i + 1);
+		free(g_all.rl_str);
+		g_all.rl_str = ft_strjoin(ft_strdup("\033[0;35m"), str2);
+	}
 	g_all.str = readline(g_all.rl_str);
 	if (!g_all.rl_str)
 	{
 		printf("exit\n");
-		ft_free("exit");
+		//ft_free("exit");
 		exit(0);
 	}
 	if (g_all.str[0])
@@ -20,21 +33,12 @@ int	ft_readline(void)
 	else
 		return (free(g_all.str), printf("validator failed\n"));
 	ft_builtins(g_all.array);
-	int i = 0;
-	while (g_all.array[i])
-		printf("%s\n", g_all.array[i++]);
 	ft_free("no exit");
 	return (0);
 }
 
-void	ft_leaks(void)
-{
-	system("leaks -q minishell");
-}
-
 int	main(int argc, char **argv, char **env)
 {
-	atexit(ft_leaks);
 	(void)argv;
 	(void)argc;
 	ft_signals();

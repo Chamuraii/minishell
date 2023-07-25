@@ -25,14 +25,14 @@ char	*ft_expand(char **str)
 	(*str)[i - 1] = 0;
 	str2 = ft_strjoin(ft_strdup((*str)), ft_get_var((*str) + i));
 	(*str)[i - 1] = aux;
-	while (ft_isalnum((*str)[i]))
+	while (ft_isalnum((*str)[i]) || (*str)[i] == '?')
 		i++;
 	free((*str));
 	(*str) = ft_strjoin(str2, ft_strdup((*str) + i));
 	return ((*str));
 }
 
-char	*ft_reassign(char **str, char *next_str)
+char	*ft_reassign(char **str, char *next_str, int cnt)
 {
 	int		i;
 
@@ -41,8 +41,6 @@ char	*ft_reassign(char **str, char *next_str)
 		ft_change_str(str, ">");
 	if (!ft_strcmp((*str), "<>"))
 		ft_change_str(str, "<");
-	if (!ft_is_p_or_r_between_quotes(*str))
-			(*str) = ft_remove_quotes_2(str);
 	while ((*str)[i])
 	{
 		if ((*str)[i] == 20)
@@ -52,12 +50,14 @@ char	*ft_reassign(char **str, char *next_str)
 			if ((*str)[i] == '$')
 			{
 				(*str) = ft_expand(str);
-				i = 0;
+				i = -1;
 			}
 		}
 		i++;
 	}
-	if (!next_str)
+	if (!ft_is_p_or_r_between_quotes(*str))
+		(*str) = ft_remove_quotes_2(str);
+	if (!next_str && cnt == 0)
 		ft_var_declare((*str));
 	return ((*str));
 }
@@ -71,7 +71,7 @@ char	**to_double_pointer(char **str)
 	array = ft_split((*str), ' ');
 	while (array[i])
 	{
-		array[i] = ft_reassign(&(array[i]), array[i + 1]);
+		array[i] = ft_reassign(&(array[i]), array[i + 1], i);
 		i++;
 	}
 	return (array);

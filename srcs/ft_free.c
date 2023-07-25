@@ -30,6 +30,7 @@ void	ft_free(char *type)
 			free(aux);
 		}
 		free(g_all.exported_list);
+		clear_history();
 	}
 	free(g_all.str);
 	i = 0;

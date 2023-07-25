@@ -1,30 +1,17 @@
-#include <stdio.h>
-#include <string.h>
+char	*ft_strstr(char *s1, char *s2)
+{
+	size_t	s2_len;
+	int i;
 
-void replaceNBSP(char* str) {
-	char* nbsp = "&nbsp;";
-	char* occurrence = NULL;
-
-	while ((occurrence = strstr(str, nbsp)) != NULL) {
-		// Calculate the length of the nbsp entity
-		size_t nbspLen = strlen(nbsp);
-
-		// Replace the nbsp occurrence with a space character
-		*occurrence = ' ';
-
-		// Shift the remaining characters to the left to remove the nbsp entity
-		memmove(occurrence + 1, occurrence + nbspLen, strlen(occurrence + nbspLen) + 1);
+	if (!(*s2) || s1 == s2)
+		return ((char *)s1);
+	s2_len = ft_strlen(s2);
+	i = 0;
+	while (s1[i])
+	{
+		if (!(ft_strncmp((char *)s1, (char *)s2, s2_len)))
+			return ((char *)(s1 + i));
+		i++;
 	}
-}
-
-int main() {
-	char text[] = "Hello&nbsp;World! This is&nbsp;a test.";
-
-	printf("Before replacement: %s\n", text);
-
-	replaceNBSP(text);
-
-	printf("After replacement: %s\n", text);
-
-	return 0;
+	return (0);
 }

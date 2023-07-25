@@ -33,7 +33,9 @@
 // TODO
 //  ------
 //  When pressing TAB, do nothing.			Mirar si hacerlo
-//  export se ma roto :(
+//  leaks
+//  norminette
+
 
 typedef struct s_all
 {
@@ -69,6 +71,7 @@ int			ft_builtin_pwd(void);
 int			ft_builtin_export(char *str, char **array, int i);
 int			ft_builtin_unset(char *str, char **array, int i);
 int			ft_builtin_cd(char *str, char **array, int i);
+int			ft_builtin_echo(char *str, char **array, int i);
 t_varlist	*ft_create_node(char *key, char *value);
 void		ft_add_var(char *key, char *value);
 int			ft_var_declare(char *str);
@@ -105,7 +108,7 @@ void		ft_sigint_handler(int signal);
 void		ft_signals(void);
 char		*ft_change_str(char **str, const char *str2);
 char		*ft_expand(char **str);
-char		*ft_reassign(char **str, char *next_str);
+char		*ft_reassign(char **str, char *next_str, int cnt);
 char		**to_double_pointer(char **str);
 void		ft_del_var(char *key);
 int			ft_is_p_or_r(char *str);

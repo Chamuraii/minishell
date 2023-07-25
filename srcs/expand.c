@@ -64,7 +64,6 @@ int	ft_var_declare(char *str)
 	if (ft_find_var_exp(key))
 		ft_add_var_exp(ft_strdup(key), ft_strdup(value));
 	ft_add_var(key, value);
-	if (ft_get_var_exp(key))
 	free(str2);
 	return (1);
 }
@@ -75,7 +74,7 @@ char	*ft_get_var(char *key)
 	int			key_len;
 
 	key_len = 0;
-	while (ft_isalnum(key[key_len]))
+	while (ft_isalnum(key[key_len]) || key[key_len] == '?')
 		key_len++;
 	head = g_all.var_list[0];
 	if (!head)

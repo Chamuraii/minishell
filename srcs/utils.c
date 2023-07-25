@@ -46,17 +46,31 @@ int ft_is_p_or_r_between_quotes(char *str)
 	return (0);
 }
 
-int ft_return_qstate(char *str, char *char_pos)
+int ft_quotes_jess(char *str)
 {
-	int	i;
-	int state;
-
-	state = 0;
-	i = 0;
-	while (str != char_pos)
-		state = ft_quote_state(str[i++], state);
-	state = ft_quote_state(str[i++], state);
-	return (state);
+	if (!str)
+		return (0);
+	if (!ft_strncmp(str, "\'\"|\"\'", 4))
+		return (1);
+	if (!ft_strncmp(str, "\'\">\"\'", 4))
+		return (1);
+	if (!ft_strncmp(str, "\'\"<\"\'", 4))
+		return (1);
+	if (!ft_strncmp(str, "\'\">>\"\'", 5))
+		return (1);
+	if (!ft_strncmp(str, "\'\"<<\"\'", 5))
+		return (1);
+	if (!ft_strncmp(str, "\"\'|\'\"", 4))
+		return (1);
+	if (!ft_strncmp(str, "\"\'>\'\"", 4))
+		return (1);
+	if (!ft_strncmp(str, "\"\'<\'\"", 4))
+		return (1);
+	if (!ft_strncmp(str, "\"\'>>\'\"", 5))
+		return (1);
+	if (!ft_strncmp(str, "\"\'<<\'\"", 5))
+		return (1);
+	return (0);
 }
 
 char	*ft_remove_quotes(char *str)
@@ -73,7 +87,7 @@ char	*ft_remove_quotes(char *str)
 	{
 		state = ft_quote_state(str[i], state);
 		if (state == DQO || state == DQC || state == SQO || state == SQC)
-			str[i] = -1;
+			str[i] = 20;
 		else
 			j++;
 		i++;
@@ -82,7 +96,7 @@ char	*ft_remove_quotes(char *str)
 	j = -1;
 	i = -1;
 	while (str[++i])
-		if (str[i] != -1)
+		if (str[i] != 20)
 			str2[++j] = str[i];
 	str2[i] = 0;
 	return (str2);
@@ -102,7 +116,7 @@ char	*ft_remove_quotes_2(char **str)
 	{
 		state = ft_quote_state((*str)[i], state);
 		if (state == DQO || state == DQC || state == SQO || state == SQC)
-			(*str)[i] = -1;
+			(*str)[i] = 20;
 		else
 			j++;
 		i++;
@@ -111,7 +125,7 @@ char	*ft_remove_quotes_2(char **str)
 	j = -1;
 	i = -1;
 	while ((*str)[++i])
-		if ((*str)[i] > 0)
+		if ((*str)[i] != 20)
 			str2[++j] = (*str)[i];
 	free(*str);
 	str2[++j] = 0;
@@ -138,3 +152,4 @@ int	ft_search_var(char *key)
 	free(key);
 	return (0);
 }
+

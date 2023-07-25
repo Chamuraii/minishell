@@ -11,7 +11,7 @@ char	*ft_strstr(char *s1, char *s2)
 	i = 0;
 	while (s1[i])
 	{
-		if (!(ft_strncmp((char *)s1, (char *)s2, s2_len)))
+		if (!ft_strncmp((char *)s1 + i, (char *)s2, s2_len))
 			return ((char *)(s1 + i));
 		i++;
 	}
