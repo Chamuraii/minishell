@@ -42,12 +42,10 @@ void	ft_add_var(char *key, char *value)
 	ft_free_2(key, value);
 }
 
-
-
 int	ft_var_declare(char *str)
 {
 	int		i;
-	char 	*str2;
+	char	*str2;
 	char	*key;
 	char	*value;
 

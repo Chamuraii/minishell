@@ -74,6 +74,7 @@ typedef struct s_varlist
 }	t_varlist;
 
 int			ft_builtins(char **str);
+int			is_builtins(char **str);
 int			ft_builtin_env(char **array, int i);
 int			ft_builtin_pwd(void);
 int			ft_builtin_export(char *str, char **array, int i);

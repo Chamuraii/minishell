@@ -34,8 +34,8 @@ int	ft_quote_state(char c, int old_state)
 
 int	ft_qvalidator_2(int state, char **str, int i)
 {
-	char *str2;
-	char *str3;
+	char	*str2;
+	char	*str3;
 
 	if ((state == DQI || state == SQI) && (*str)[i] == 32)
 		(*str)[i] = 20;
@@ -43,14 +43,12 @@ int	ft_qvalidator_2(int state, char **str, int i)
 		(*str)[i] = 32;
 	else if (state == NQ && !ft_strncmp((*str) + i, "\302\240", 2))
 	{
-		printf("!!!  nbsp found %d - %d \360\237\230\200 !!!\n", (*str)[i], (*str)[i + 1]);
 		(*str)[i] = 0;
 		(*str)[i + 1] = 32;
 		str2 = ft_strdup((*str));
 		str3 = ft_strdup((*str) + i + 1);
 		free (*str);
 		(*str) = ft_strjoin(str2, str3);
-		printf("!!!  nbsp after %d - %d  !!!\n", (*str)[i - 1], (*str)[i]);
 	}
 	(*str) = ft_rseparator(state, str, i);
 	if (state == NQ)

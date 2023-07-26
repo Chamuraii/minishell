@@ -4,13 +4,14 @@ t_all	g_all;
 
 char	*ft_readline_str(void)
 {
-	char 	*str;
+	char	*str;
 	char	*str2;
 	char	*str3;
 	int		i;
 
+	dup2(1, 0);
 	str = ft_strdup("\033[0;35m$PWD\033[0;32m@\033"
-							 "[0;34mminishell\033[0;32m$ \033[1;97m");
+					 "[0;34mminishell\033[0;32m$ \033[1;97m");
 	str = ft_expand(&(str));
 	i = 0;
 	while (str[i] != '@')
@@ -57,7 +58,8 @@ int	ft_readline(void)
 		g_all.array = to_double_pointer(&(g_all.str));
 	else
 		return (free(g_all.str), printf("validator failed\n"));
-	ft_builtins(g_all.array);
+	execute();
+	//ft_builtins(g_all.array);
 	//ft_free("no exit");
 	int i = 0;
 	while (g_all.array[i])
