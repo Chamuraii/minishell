@@ -14,8 +14,8 @@ int	ft_builtin_cd(char *str, char **array, int i)
 	}
 	if (ft_strcmp(ft_get_var(ft_strdup("PWD")), ft_get_var(ft_strdup("OLDPWD"))))
 	{
-		ft_add_var(ft_strdup("OLDPWD"), ft_strdup(ft_get_var(ft_strdup("PWD"))));
-		ft_add_var_exp(ft_strdup("OLDPWD"), ft_strdup(ft_get_var(ft_strdup("PWD"))));
+		ft_add_var(ft_strdup("OLDPWD"), ft_strdup(ft_get_var("PWD")));
+		ft_add_var_exp(ft_strdup("OLDPWD"), ft_strdup(ft_get_var("PWD")));
 	}
 	ft_add_var(ft_strdup("PWD"), ft_strdup(getcwd(NULL, sizeof(char *))));
 	ft_add_var_exp(ft_strdup("PWD"), ft_strdup(getcwd(NULL, sizeof(char *))));

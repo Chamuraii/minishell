@@ -15,20 +15,19 @@ char	*ft_expand(char **str)
 {
 	int		i;
 	char	*str2;
-	char	aux;
+	char 	*str3;
 
 	i = 0;
 	while ((*str)[i] != '$')
 		i++;
 	i++;
-	aux = (*str)[i - 1];
 	(*str)[i - 1] = 0;
-	str2 = ft_strjoin(ft_strdup((*str)), ft_get_var((*str) + i));
-	(*str)[i - 1] = aux;
+	str2 = ft_strjoin(ft_strdup(*str), ft_get_var((*str) + i));
 	while (ft_isalnum((*str)[i]) || (*str)[i] == '?')
 		i++;
-	//free((*str));
-	(*str) = ft_strjoin(str2, ft_strdup((*str) + i));
+	str3 = ft_strdup((*str) + i);
+	free((*str));
+	(*str) = ft_strjoin(str2, str3);
 	return ((*str));
 }
 

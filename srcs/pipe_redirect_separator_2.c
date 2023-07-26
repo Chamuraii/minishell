@@ -2,7 +2,7 @@
 
 extern t_all	g_all;
 
-void	ft_rseparator_5(char **str, int i)
+char	*ft_rseparator_5(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
@@ -17,11 +17,11 @@ void	ft_rseparator_5(char **str, int i)
 	if ((*str)[i + 1] != 32 && (*str)[i + 1] != '<' && (*str)[i + 1] != '>')
 		str2 = ft_strjoin(str2, ft_strdup(" "));
 	free((*str));
-	(*str) = 0;
 	(*str) = ft_strjoin(str2, str3);
+	return ((*str));
 }
 
-void	ft_rseparator_6(char **str, int i)
+char	*ft_rseparator_6(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
@@ -36,6 +36,6 @@ void	ft_rseparator_6(char **str, int i)
 	if ((*str)[i + 1] != 32 && (*str)[i + 1] != '>' && (*str)[i + 1] != '|')
 		str2 = ft_strjoin(str2, ft_strdup(" "));
 	free((*str));
-	(*str) = 0;
 	(*str) = ft_strjoin(str2, str3);
+	return ((*str));
 }

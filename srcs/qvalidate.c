@@ -52,7 +52,7 @@ int	ft_qvalidator_2(int state, char **str, int i)
 		(*str) = ft_strjoin(str2, str3);
 		printf("!!!  nbsp after %d - %d  !!!\n", (*str)[i - 1], (*str)[i]);
 	}
-	ft_rseparator(state, str, i);
+	(*str) = ft_rseparator(state, str, i);
 	if (state == NQ)
 		if (!ft_rvalidator(str, i))
 			return (0);

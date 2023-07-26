@@ -26,7 +26,6 @@ char	*ft_readline_str(void)
 		{
 			free(str2);
 			str2 = ft_strdup(str + i + ft_strlen(str3) + 1);
-			free(str3);
 			str2 = ft_strjoin(ft_strdup("~"), str2);
 			free(str);
 			str = ft_strjoin(ft_strdup("\033[0;35m"), str2);
@@ -36,6 +35,7 @@ char	*ft_readline_str(void)
 			free(str);
 			str = ft_strjoin(ft_strdup("\033[0;35m"),str2);
 		}
+		free(str3);
 	}
 	return (str);
 }
@@ -46,6 +46,7 @@ int	ft_readline(void)
 	g_all.str = readline(str);
 	if (!g_all.str)
 	{
+		free(str);
 		printf("exit\n");
 		//ft_free("exit");
 		exit(0);
@@ -57,7 +58,16 @@ int	ft_readline(void)
 	else
 		return (free(g_all.str), printf("validator failed\n"));
 	ft_builtins(g_all.array);
-	ft_free("no exit");
+	//ft_free("no exit");
+	int i = 0;
+	while (g_all.array[i])
+	{
+		free(g_all.array[i]);
+		i++;
+	}
+	free(g_all.array);
+	free(str);
+	free(g_all.str);
 	return (0);
 }
 
@@ -70,5 +80,4 @@ int	main(int argc, char **argv, char **env)
 	ft_init_env(env);
 	while (1)
 		ft_readline();
-	ft_free("exit");
 }

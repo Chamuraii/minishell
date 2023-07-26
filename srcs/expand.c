@@ -56,7 +56,10 @@ int	ft_var_declare(char *str)
 	while (str2[i] && str2[i] != '=')
 		i++;
 	if (str2[i] != '=')
+	{
+		free(str2);
 		return (0);
+	}
 	str2[i] = 0;
 	key = ft_strdup(str2);
 	++i;
