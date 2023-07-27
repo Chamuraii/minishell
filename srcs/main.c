@@ -50,8 +50,8 @@ int	ft_readline(void)
 		free(str);
 		printf("exit\n");
 		//ft_free("exit");
-		//exit(0);
-		return(0); // change to exitasdsadasdasdasdasdasdasdasdasd
+		exit(0);
+		//return(0); // change to exitasdsadasdasdasdasdasdasdasdasd
 	}
 	if (g_all.str[0])
 		add_history(g_all.str);

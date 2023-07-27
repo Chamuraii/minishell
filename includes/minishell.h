@@ -132,5 +132,6 @@ int			ft_search_var(char *key);
 int			execute(void);
 int			ft_quotes_jess(char *str);
 int			is_pipe(void);
+int			is_builtins(char **array);
 
 #endif

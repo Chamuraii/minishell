@@ -15,9 +15,6 @@ SRC        = $(addprefix $(SRC_DIR),$(SRC_FILES))
 OBJ        = $(addprefix $(OBJ_DIR),$(OBJ_FILES))
 LIBFT      = $(addprefix $(LIBFT_DIR),libft.a)
 
-BREW_LIB = "/Users/$(USER)/.brew/opt/readline/lib"
-BREW_INCLUDE = "/Users/$(USER)/.brew/opt/readline/include/readline"
-
 -include $(OBJ_FILES:.o=.d)
 
 # Se compila el archivo binario (ejecutable).
@@ -34,7 +31,7 @@ $(LIBFT):
 # Se compila los objetos con las librerías y archivos
 $(NAME): $(OBJ)
 	@echo "(ﾉ◕ヮ◕)ﾉ*:・ﾟ✧ Compilando, espere unos segundos..."
-	@gcc $(OBJ) -o $(NAME) $(LIBFT) -L /Users/$(USER)/.brew/opt/readline/lib -I /Users/$(USER)/.brew/opt/readline/include/readline -lreadline
+	@gcc $(OBJ) -o $(NAME) $(LIBFT) -lreadline
 	@echo "(•̀ᴗ•́)و $(NAME) generado!"
 # Remueve todos los archivos objetos
 clean:

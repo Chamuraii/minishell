@@ -20,7 +20,7 @@ void	ft_add_var(char *key, char *value)
 	t_varlist	*head;
 	t_varlist	*head2;
 
-	//printf("%s, %s\n", key, value);
+	printf("--%s, %s\n", key, value);
 	head = g_all.var_list[0];
 	if (!head)
 	{

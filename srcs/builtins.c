@@ -84,7 +84,7 @@ int	ft_builtins(char **array, int i)
 	if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1)
 	|| !ft_strncmp(array[0], "ENV", ft_strlen("ENV") + 1))
 		return (ft_builtin_env(array));
-	else if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1))
+	 if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1))
 		return (ft_builtin_pwd(array));
 	else if (!ft_strncmp(array[0], "export", ft_strlen("export") + 1))
 		return (ft_builtin_export(array[0], array, i));
@@ -123,6 +123,8 @@ int	is_builtins(char **array)
 {
 	char	*str;
 
+	if (array[0])
+	{
 	str = array[0];
 	if (!ft_strncmp(str, "env", ft_strlen("env") + 1)
 		|| !ft_strncmp(str, "ENV", ft_strlen("ENV") + 1))
@@ -139,5 +141,6 @@ int	is_builtins(char **array)
 		return (1);
 	else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
 		return (1);
+	}
 	return (0);
 }

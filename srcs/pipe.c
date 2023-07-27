@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/27 16:44:58 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/27 18:34:20 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	args_fill(int i, int end);
 
 int	ft_exit(int status)
 {
+	printf("pid = %d\n", getpid());
 	if (status == 126 && ft_strcmp(g_all.commands[0], "") == 0)
 	{
 		write(2, "error 127", 9);
@@ -39,12 +40,14 @@ int	ft_exit(int status)
 	g_all.error = status;
 //	printf("status %d\n", g_all.error);
 	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
+	printf("%s\n", ft_get_var("?"));
 	exit (status);
 //	return (status);
 }
 
 int	ft_return(int status)
 {
+	printf("pid2 = %d\n", getpid());
 	if (status != 127)
 		write(2, strerror(status), strlen(strerror(status)));
 	else
@@ -234,6 +237,7 @@ void	pipes(int last)
 	pipe(g_all.p);
 	if (!g_all.path)
 		ft_exit(0);
+	ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	j = fork();
 	if (j == -1)
 		ft_return(errno);
@@ -247,7 +251,6 @@ void	pipes(int last)
 		if (g_all.outfile > 0)
 			dup2(g_all.outfile, 1);
 		i = ft_builtins(g_all.commands, g_all.array_pos);
-		ft_add_var(ft_strdup("?"), ft_strdup("0"));
 		if (i == 0)
 			execve(g_all.path, (char *const *) g_all.commands, g_all.env);
 		dup2(0, 1);
@@ -325,14 +328,17 @@ void	args_fill(int i, int end)
 			pipes(0);
 		else if (g_all.path)
 			pipes(1);
-		else
+		else if (is_builtins(g_all.commands) == 1)
 		{
 			if (g_all.outfile > 0)
 				dup2(g_all.outfile, 1);
 			ft_builtins(g_all.commands, g_all.array_pos);
-			dup2(0, 1);
+			if (g_all.outfile > 0)
+				dup2(0, 1);
 		}
 	}
+	//printf("varr %s\n", ft_get_var("?"));
+	//printf("err %d\n", g_all.error);
 	free_pipe();
 	g_all.size ++;
 	if (g_all.array[g_all.size])
