@@ -46,7 +46,6 @@ int	ft_builtin_export(char *str, char **array, int i)
 			printf("declare -x %s=%s\n", head->key, head->value);
 			head = head->next;
 		}
-		return (1);
 	}
 	if (i)
 		return (1);
@@ -86,7 +85,7 @@ int	ft_builtins(char **array, int i)
 	else if (!ft_strncmp(array[0], "unset", ft_strlen("unset") + 1))
 		return (ft_builtin_unset(array[0], array));
 	else if (!ft_strncmp(array[0], "cd", ft_strlen("cd") + 1))
-		return (ft_builtin_cd(array[0], array));
+		return (ft_builtin_cd(array[0], array, i));
 	else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1))
 		return (ft_builtin_echo(array[0], array));
 	else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))

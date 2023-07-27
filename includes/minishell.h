@@ -79,7 +79,7 @@ int			ft_builtin_env(char **array);
 int			ft_builtin_pwd(char **array);
 int			ft_builtin_export(char *str, char **array, int i);
 int			ft_builtin_unset(char *str, char **array);
-int			ft_builtin_cd(char *str, char **array);
+int			ft_builtin_cd(char *str, char **array, int i);
 int			ft_builtin_echo(char *str, char **array);
 t_varlist	*ft_create_node(char *key, char *value);
 void		ft_add_var(char *key, char *value);
