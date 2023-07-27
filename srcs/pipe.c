@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/27 16:09:34 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/27 16:44:58 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_exit(int status)
 		write(2, "error 127", 9);
 	write(2, "\n", 1);
 	g_all.error = status;
-	printf("status %d\n", g_all.error);
+//	printf("status %d\n", g_all.error);
 	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
 	exit (status);
 //	return (status);
@@ -51,7 +51,7 @@ int	ft_return(int status)
 		write(2, "error 127", 9);
 	write(2, "\n", 1);
 	g_all.error = status;
-	printf("status %d\n", g_all.error);
+//	printf("status %d\n", g_all.error);
 	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
 	return (status);
 }
@@ -230,6 +230,7 @@ void	pipes(int last)
 	int	i;
 	int	j;
 
+	//write(1, "ah ouais..", 10);
 	pipe(g_all.p);
 	if (!g_all.path)
 		ft_exit(0);
@@ -324,6 +325,13 @@ void	args_fill(int i, int end)
 			pipes(0);
 		else if (g_all.path)
 			pipes(1);
+		else
+		{
+			if (g_all.outfile > 0)
+				dup2(g_all.outfile, 1);
+			ft_builtins(g_all.commands, g_all.array_pos);
+			dup2(0, 1);
+		}
 	}
 	free_pipe();
 	g_all.size ++;
