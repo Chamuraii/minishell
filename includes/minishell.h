@@ -129,5 +129,6 @@ int			ft_change_dir(char *str);
 int			ft_is_p_or_r_between_quotes(char *str);
 int			ft_search_var(char *key);
 int			execute(void);
+int			ft_quotes_jess(char *str);
 
 #endif

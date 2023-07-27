@@ -54,7 +54,7 @@ char	*ft_reassign(char **str, char *next_str, int cnt)
 		}
 		i++;
 	}
-	if (!ft_is_p_or_r_between_quotes(*str))
+	if (!ft_is_p_or_r_between_quotes(*str) && !ft_quotes_jess(*str))
 		(*str) = ft_remove_quotes_2(str);
 	if (!next_str && cnt == 0)
 		ft_var_declare((*str));

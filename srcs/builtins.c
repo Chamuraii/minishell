@@ -37,33 +37,30 @@ int	ft_builtin_export(char *str, char **array, int i)
 {
 	t_varlist	*head;
 
-	str = array[1];
-	if (!str)
+	(void)str;
+	if (!array[1])
 	{
-		if (!array[1])
+		head = g_all.exported_list[0];
+		while (head)
 		{
-			head = g_all.exported_list[0];
-			while (head)
-			{
-				printf("declare -x %s=%s\n", head->key, head->value);
-				head = head->next;
-			}
+			printf("declare -x %s=%s\n", head->key, head->value);
+			head = head->next;
 		}
 		return (1);
 	}
 	if (i)
 		return (1);
-	if (ft_strstr(str, "="))
+	if (ft_strstr(array[1], "="))
 	{
 		if (str[0] == '=')
 			return (1);
-		ft_var_declare(ft_strdup(str));
-		ft_var_declare_exp(ft_strdup(str));
+		ft_var_declare(ft_strdup(array[1]));
+		ft_var_declare_exp(ft_strdup(array[1]));
 		return (1);
 	}
-	if (!ft_search_var(ft_strdup(str)))
+	if (!ft_search_var(ft_strdup(array[1])))
 		return (1);
-	ft_add_var_exp(ft_strdup(str), ft_get_var(ft_strdup(str)));
+	ft_add_var_exp(ft_strdup(array[1]), ft_get_var(ft_strdup(array[1])));
 	return (1);
 }
 
