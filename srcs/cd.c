@@ -2,9 +2,9 @@
 
 extern t_all	g_all;
 
-int	ft_builtin_cd(char *str, char **array, int i)
+int	ft_builtin_cd(char *str, char **array)
 {
-	str = array[i];
+	str = array[1];
 	if (!str)
 		chdir(ft_get_var_exp("HOME"));
 	else if (chdir(str) < 0)

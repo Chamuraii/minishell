@@ -45,7 +45,7 @@ typedef struct s_all
 	char				**env; //stack
 	struct s_varlist	**var_list;
 	struct s_varlist	**exported_list;
-	char				*rl_str;
+	int 				array_pos;
 	//pipex
 	char				**commands;
 	char				**recep;
@@ -73,14 +73,14 @@ typedef struct s_varlist
 	struct s_varlist	*next;
 }	t_varlist;
 
-int			ft_builtins(char **str);
+int			ft_builtins(char **array, int i);
 int			is_builtins(char **str);
-int			ft_builtin_env(char **array, int i);
-int			ft_builtin_pwd(void);
+int			ft_builtin_env(char **array);
+int			ft_builtin_pwd(char **array);
 int			ft_builtin_export(char *str, char **array, int i);
-int			ft_builtin_unset(char *str, char **array, int i);
-int			ft_builtin_cd(char *str, char **array, int i);
-int			ft_builtin_echo(char *str, char **array, int i);
+int			ft_builtin_unset(char *str, char **array);
+int			ft_builtin_cd(char *str, char **array);
+int			ft_builtin_echo(char *str, char **array);
 t_varlist	*ft_create_node(char *key, char *value);
 void		ft_add_var(char *key, char *value);
 int			ft_var_declare(char *str);

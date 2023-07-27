@@ -80,10 +80,13 @@ int where(void)
 {
 	int		i;
 	char	*temp;
+	char 	*jess_free_pls;
 
 	i = 0;
 	g_all.path = NULL;
-	g_all.where = ft_split(ft_get_var_exp("PATH"), ':');
+	jess_free_pls = ft_get_var_exp("PATH");
+	g_all.where = ft_split(jess_free_pls, ':');
+	free(jess_free_pls);
 	while (g_all.where[i])
 	{
 		temp = ft_strj(g_all.where[i], "/");
@@ -253,7 +256,7 @@ void	pipes(int last)
 			dup2(g_all.p[1], 1);
 		if (g_all.outfile > 0)
 			dup2(g_all.outfile, 1);
-		i = ft_builtins(g_all.commands);
+		i = ft_builtins(g_all.commands, g_all.array_pos);
 		if (i == 0)
 			execve(g_all.path, (char *const *) g_all.commands, g_all.env);
 		dup2(0, 1);
@@ -300,13 +303,15 @@ void	args_fill(int i, int end)
 	int	j;
 
 	j = 0;
-	g_all.commands = ft_calloc(1000, sizeof(char));
+	g_all.array_pos = i;
+	g_all.commands = ft_calloc(end - i, sizeof(char *));
 	while (i < end)
 	{
-		g_all.commands[j] = g_all.array[i];
+		g_all.commands[j] = ft_strdup(g_all.array[i]);
 		i ++;
 		j ++;
 	}
+	g_all.commands[j] = 0;
 	//remove comillas aqui (y expand $? ???)
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0) // justo al principio when no < > (al final no)
@@ -314,7 +319,7 @@ void	args_fill(int i, int end)
 		|| (ft_strcmp(g_all.commands[0], "cd") == 0) // anywhere
 		|| (ft_strcmp(g_all.commands[0], "unset") == 0)))
 	{
-		ft_builtins(g_all.commands);
+		ft_builtins(g_all.commands, g_all.array_pos);
 	}
 	else if (((g_all.is_outfile == 0 && g_all.outfile == 0)
 			|| (g_all.is_outfile == 1 && g_all.outfile > 0))

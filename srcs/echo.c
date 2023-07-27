@@ -2,10 +2,12 @@
 
 extern t_all	g_all;
 
-int	ft_builtin_echo(char *str, char **array, int i)
+int	ft_builtin_echo(char *str, char **array)
 {
 	int	flag_bool;
+	int i;
 
+	i = 1;
 	flag_bool = 1;
 	if (!ft_strcmp(array[i], "-n"))
 	{
@@ -24,7 +26,7 @@ int	ft_builtin_echo(char *str, char **array, int i)
 		printf("\n");
 	else
 	{
-		printf("\033[47m\033[30m%%");
+		printf("\033[107m\033[1;30m%%");
 		printf("\033[0m");
 	}
 	return (1);

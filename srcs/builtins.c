@@ -2,11 +2,11 @@
 
 extern t_all	g_all;
 
-int	ft_builtin_env(char **array, int i)
+int	ft_builtin_env(char **array)
 {
 	t_varlist	*head;
 
-	if (ft_is_p_or_r(array[i]) || !array[i])
+	if (!array[1])
 	{
 		head = g_all.exported_list[0];
 		while (head)
@@ -18,15 +18,18 @@ int	ft_builtin_env(char **array, int i)
 	return (1);
 }
 
-int	ft_builtin_pwd(void)
+int	ft_builtin_pwd(char **array)
 {
 	char	*pwd;
 
-	pwd = ft_get_var_exp("PWD");
-	if (!pwd)
-		pwd = ft_get_var_exp("OLDPWD");
-	printf("%s\n", pwd);
-	free(pwd);
+	if (array[0])
+	{
+		pwd = ft_get_var_exp("PWD");
+		if (!pwd)
+			pwd = ft_get_var_exp("OLDPWD");
+		printf("%s\n", pwd);
+		free(pwd);
+	}
 	return (1);
 }
 
@@ -34,10 +37,10 @@ int	ft_builtin_export(char *str, char **array, int i)
 {
 	t_varlist	*head;
 
-	str = array[i];
+	str = array[1];
 	if (!str)
 	{
-		if (ft_is_p_or_r(array[i]) || !array[i])
+		if (!array[1])
 		{
 			head = g_all.exported_list[0];
 			while (head)
@@ -48,6 +51,8 @@ int	ft_builtin_export(char *str, char **array, int i)
 		}
 		return (1);
 	}
+	if (i)
+		return (1);
 	if (ft_strstr(str, "="))
 	{
 		if (str[0] == '=')
@@ -62,9 +67,9 @@ int	ft_builtin_export(char *str, char **array, int i)
 	return (1);
 }
 
-int	ft_builtin_unset(char *str, char **array, int i)
+int	ft_builtin_unset(char *str, char **array)
 {
-	str = array[i];
+	str = array[1];
 	if (!str)
 		return (1);
 	if (!ft_strncmp(str, "PWD", ft_strlen("PWD")))
@@ -73,48 +78,38 @@ int	ft_builtin_unset(char *str, char **array, int i)
 	return (1);
 }
 
-int	ft_builtins(char **array)
+int	ft_builtins(char **array, int i)
 {
-	int		i;
-	char	*str;
-
-	i = 0;
-	//while (array[i])
-	//{
-	str = array[i++];
-	if (!ft_strncmp(str, "env", ft_strlen("env") + 1) || !ft_strncmp(str, "ENV", ft_strlen("ENV") + 1))
-		return (ft_builtin_env(array, i));
-	else if (!ft_strncmp(str, "pwd", ft_strlen("pwd") + 1))
-		return (ft_builtin_pwd());
-	else if (!ft_strncmp(str, "export", ft_strlen("export") + 1))
-		return (ft_builtin_export(str, array, i));
-	else if (!ft_strncmp(str, "unset", ft_strlen("unset") + 1))
-		return (ft_builtin_unset(str, array, i));
-	else if (!ft_strncmp(str, "cd", ft_strlen("cd") + 1))
-		return (ft_builtin_cd(str, array, i));
-	else if (!ft_strncmp(str, "echo", ft_strlen("echo") + 1))
-		return (ft_builtin_echo(str, array, i));
-	else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
+	if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1) || !ft_strncmp(array[0], "ENV", ft_strlen("ENV") + 1))
+		return (ft_builtin_env(array));
+	else if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1))
+		return (ft_builtin_pwd(array));
+	else if (!ft_strncmp(array[0], "export", ft_strlen("export") + 1))
+		return (ft_builtin_export(array[0], array, i));
+	else if (!ft_strncmp(array[0], "unset", ft_strlen("unset") + 1))
+		return (ft_builtin_unset(array[0], array));
+	else if (!ft_strncmp(array[0], "cd", ft_strlen("cd") + 1))
+		return (ft_builtin_cd(array[0], array));
+	else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1))
+		return (ft_builtin_echo(array[0], array));
+	else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
 	{
-		ft_free("exit");
-		exit(0);
+		if (!i)
+		{
+			ft_free("exit");
+			exit(0);
+		}
+		else
+			return (1);
 	}
-	while (array[i] && ft_strcmp(array[i], "|"))
-		i++;
-	if (array[i])
-		if (!ft_strcmp(array[i], "|"))
-			i++;
-	//}
 	return (0);
 }
 
 int	is_builtins(char **array)
 {
-	int		i;
 	char	*str;
 
-	i = 0;
-	str = array[i++];
+	str = array[0];
 	if (!ft_strncmp(str, "env", ft_strlen("env") + 1)
 		|| !ft_strncmp(str, "ENV", ft_strlen("ENV") + 1))
 		return (1);
