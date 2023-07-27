@@ -50,14 +50,15 @@ int	ft_readline(void)
 		free(str);
 		printf("exit\n");
 		//ft_free("exit");
-		exit(0);
+		//exit(0);
+		return(0); // change to exitasdsadasdasdasdasdasdasdasdasd
 	}
 	if (g_all.str[0])
 		add_history(g_all.str);
 	if (ft_qvalidator(&(g_all.str)))
 		g_all.array = to_double_pointer(&(g_all.str));
 	else
-		return (free(g_all.str), printf("syntax error near unexpected token: \n"));
+		return (free(g_all.str), g_all.error = 258);
 	execute();
 	//ft_builtins(g_all.array);
 	//ft_free("no exit");

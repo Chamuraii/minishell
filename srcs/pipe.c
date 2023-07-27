@@ -168,13 +168,11 @@ int	heredoc(void)
 {
 	int		j;
 	char	*his;
-	char	*other;
 
 	j = 0;
 	pipe(g_all.p);
 	while (j == 0)
 	{
-		other = double_heredoc();
 		dup2(1, 0);
 		his = readline("> ");
 		if (!his)

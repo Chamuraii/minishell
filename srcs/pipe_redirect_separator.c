@@ -74,7 +74,6 @@ char	*ft_rseparator_4(char **str, int i)
 	if ((*str)[i + 2] != 32)
 		str2 = ft_strjoin(str2, ft_strdup(" "));
 	free((*str));
-	str2 = ft_strjoin(str2, str3);
 	(*str) = ft_strjoin(str2, str3);
 	return ((*str));
 }

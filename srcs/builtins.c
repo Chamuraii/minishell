@@ -46,8 +46,13 @@ int	ft_builtin_export(char *str, char **array, int i)
 			printf("declare -x %s=%s\n", head->key, head->value);
 			head = head->next;
 		}
+		return (1);
 	}
 	if (i)
+		return (1);
+	while (ft_strcmp(g_all.array[i], "|") && g_all.array[i])
+		i++;
+	if (!ft_strcmp(g_all.array[i], "|"))
 		return (1);
 	if (ft_strstr(array[1], "="))
 	{
@@ -76,7 +81,8 @@ int	ft_builtin_unset(char *str, char **array)
 
 int	ft_builtins(char **array, int i)
 {
-	if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1) || !ft_strncmp(array[0], "ENV", ft_strlen("ENV") + 1))
+	if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1)
+	|| !ft_strncmp(array[0], "ENV", ft_strlen("ENV") + 1))
 		return (ft_builtin_env(array));
 	else if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1))
 		return (ft_builtin_pwd(array));
@@ -90,11 +96,15 @@ int	ft_builtins(char **array, int i)
 		return (ft_builtin_echo(array[0], array));
 	else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
 	{
-		if (!i || i == 2)
+		if ((!i && ft_strcmp(array[1], "|")) || (i == 2 && ft_strcmp(array[1], "|")))
 		{
 			if (i == 2)
 				if (ft_strcmp(g_all.array[i - 2], "<"))
 					return (1);
+			while (ft_strcmp(g_all.array[i], "|") && g_all.array[i])
+				i++;
+			if (!ft_strcmp(g_all.array[i], "|"))
+				return (1);
 			if (array[1])
 				g_all.error = ft_atoi(array[1]);
 			else

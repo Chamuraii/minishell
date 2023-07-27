@@ -33,6 +33,7 @@
 // TODO
 //  ------
 //  When pressing TAB, do nothing.			Mirar si hacerlo
+//  export doesnt redirect
 //  leaks
 //  norminette
 
@@ -130,5 +131,6 @@ int			ft_is_p_or_r_between_quotes(char *str);
 int			ft_search_var(char *key);
 int			execute(void);
 int			ft_quotes_jess(char *str);
+int			is_pipe(void);
 
 #endif
