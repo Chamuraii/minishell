@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/26 18:00:19 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/27 16:09:34 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	ft_exit(int status)
 		write(2, "error 127", 9);
 	write(2, "\n", 1);
 	g_all.error = status;
+	printf("status %d\n", g_all.error);
+	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
 	exit (status);
 //	return (status);
 }
@@ -49,6 +51,8 @@ int	ft_return(int status)
 		write(2, "error 127", 9);
 	write(2, "\n", 1);
 	g_all.error = status;
+	printf("status %d\n", g_all.error);
+	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
 	return (status);
 }
 
@@ -104,8 +108,11 @@ int where(void)
 		g_all.path = g_all.commands[0];
 		return (0);
 	}
-	if (!is_builtins(g_all.commands))
-		ft_return(127);
+	if (g_all.commands[0])
+	{
+		if (!is_builtins(g_all.commands))
+			ft_return(127);
+	}
 	return (127);
 }
 
@@ -157,22 +164,6 @@ void	ptp_append(int i)
 	del_arg(i);
 }
 
-char *double_heredoc(void)
-{
-	int	i;
-
-	i = g_all.size - 1;
-	while (g_all.array[i])
-	{
-		//printf("array %s\n", g_all.array[i]);
-		if (ft_strncmp(g_all.array[i], "<<", 2) != 0)
-			i ++;
-		else if (g_all.array[i + 1])
-			return (g_all.array[i + 1]);
-	}
-	return (NULL);
-}
-
 int	heredoc(void)
 {
 	int		j;
@@ -184,7 +175,7 @@ int	heredoc(void)
 	while (j == 0)
 	{
 		other = double_heredoc();
-		//printf("is heredoc %s\n", double_heredoc());
+		dup2(1, 0);
 		his = readline("> ");
 		if (!his)
 		{
@@ -221,7 +212,7 @@ int	heredoc(void)
 void	ptp_heredoc(int i)
 {
 	g_all.eof_heredoc = g_all.array[i + 1];
-	printf("eof : %s\n", g_all.eof_heredoc);
+	//printf("eof : %s\n", g_all.eof_heredoc);
 	heredoc();
 	del_arg(i);
 }
@@ -257,6 +248,7 @@ void	pipes(int last)
 		if (g_all.outfile > 0)
 			dup2(g_all.outfile, 1);
 		i = ft_builtins(g_all.commands, g_all.array_pos);
+		ft_add_var(ft_strdup("?"), ft_strdup("0"));
 		if (i == 0)
 			execve(g_all.path, (char *const *) g_all.commands, g_all.env);
 		dup2(0, 1);
@@ -276,6 +268,7 @@ void	pipes(int last)
 /*	  if (all->path)
 	free(all->path); */
 		waitpid(j, NULL, 0);
+		//ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	}
 //  dup2(0, 1);
 	free_pipe();
@@ -308,6 +301,9 @@ void	args_fill(int i, int end)
 	while (i < end)
 	{
 		g_all.commands[j] = ft_strdup(g_all.array[i]);
+		if (ft_strncmp(g_all.commands[j], "'", 1) == 0
+			|| ft_strncmp(g_all.commands[j], "\"", 1) == 0)
+			ft_remove_quotes(g_all.commands[j]);
 		i ++;
 		j ++;
 	}
@@ -371,16 +367,42 @@ void	split_pipe(void)
 	redirections(g_all.start_i, g_all.size - 1);
 }
 
+void change_array(void)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (g_all.array[i + 1])
+	{
+		if (ft_strcmp(g_all.array[i], "|") == 0 && ft_strcmp(g_all.array[i + 1], "<<") == 0)
+		{
+			g_all.array[i] = ">";
+			while (g_all.array[i + 1])
+			{
+				j = i;
+				g_all.array[i + 1] = g_all.array[i];
+				i ++;
+				pipe(g_all.p);
+				g_all.outfile = g_all.p[1];
+			}
+		}
+		i ++;
+	}
+}
+
 int execute(void)
 {
 	if (!g_all.array[0])
 		return (0);
+//	change_array();
 //	system("leaks minishell");
 /*  g_all.array_size = 0;
 	while (g_all.array[g_all.array_size])
 	g_all.array_size ++; */
 	g_all.i = 0;
 	g_all.j = 0;
+	g_all.error = 0;
 	g_all.start_i = 0;
 	g_all.end_i = 0;
 	g_all.size = 0;

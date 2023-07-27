@@ -17,6 +17,7 @@ void	ft_var_init(void)
 		exit(0);
 	}
 	g_all.var_list[0] = 0;
+	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
 	g_all.exported_list = (t_varlist **)malloc(sizeof(t_varlist *));
 	if (!g_all.exported_list)
 	{
