@@ -94,10 +94,18 @@ int	ft_builtins(char **array, int i)
 		return (ft_builtin_echo(array[0], array));
 	else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
 	{
-		if (!i)
+		if (!i || i == 2)
 		{
+			if (i == 2)
+				if (ft_strcmp(g_all.array[i - 2], "<"))
+					return (1);
+			if (array[1])
+				g_all.error = ft_atoi(array[1]);
+			else
+				g_all.error = 0;
+			printf("minishell exited with status: %d\n", g_all.error);
 			ft_free("exit");
-			exit(0);
+			exit(g_all.error);
 		}
 		else
 			return (1);
@@ -124,6 +132,6 @@ int	is_builtins(char **array)
 	else if (!ft_strncmp(str, "echo", ft_strlen("echo") + 1))
 		return (1);
 	else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
-		exit(0);
+		return (1);
 	return (0);
 }

@@ -304,7 +304,7 @@ void	args_fill(int i, int end)
 
 	j = 0;
 	g_all.array_pos = i;
-	g_all.commands = ft_calloc(end - i, sizeof(char *));
+	g_all.commands = ft_calloc(end - i + 1, sizeof(char *));
 	while (i < end)
 	{
 		g_all.commands[j] = ft_strdup(g_all.array[i]);

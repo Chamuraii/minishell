@@ -57,7 +57,7 @@ int	ft_readline(void)
 	if (ft_qvalidator(&(g_all.str)))
 		g_all.array = to_double_pointer(&(g_all.str));
 	else
-		return (free(g_all.str), printf("validator failed\n"));
+		return (free(g_all.str), printf("syntax error near unexpected token: \n"));
 	execute();
 	//ft_builtins(g_all.array);
 	//ft_free("no exit");
