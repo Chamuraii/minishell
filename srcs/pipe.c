@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/27 18:34:20 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/28 16:00:31 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	args_fill(int i, int end);
 
 int	ft_exit(int status)
 {
-	printf("pid = %d\n", getpid());
+	//printf("pid = %d\n", getpid());
 	if (status == 126 && ft_strcmp(g_all.commands[0], "") == 0)
 	{
 		write(2, "error 127", 9);
@@ -40,14 +40,13 @@ int	ft_exit(int status)
 	g_all.error = status;
 //	printf("status %d\n", g_all.error);
 	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
-	printf("%s\n", ft_get_var("?"));
+//	printf("%s\n", ft_get_var("?"));
 	exit (status);
-//	return (status);
 }
 
 int	ft_return(int status)
 {
-	printf("pid2 = %d\n", getpid());
+	//printf("pid2 = %d\n", getpid());
 	if (status != 127)
 		write(2, strerror(status), strlen(strerror(status)));
 	else
@@ -123,8 +122,8 @@ void	del_arg(int i)
 {
 	while (g_all.array[i])
 	{
-	g_all.array[i] = g_all.array[i + 2];
-	i ++;
+		g_all.array[i] = g_all.array[i + 2];
+		i ++;
 	}
 	g_all.size -= 2;
 }
@@ -133,7 +132,6 @@ void	ptp_infile(int i)
 {
 	g_all.is_infile = 1;
 	g_all.infile = open (g_all.array[i + 1], O_RDONLY, 0644);
-//	printf("infile : %d, %s\n", g_all.infile, g_all.array[i + 1]);
 	if (g_all.infile <= 0)
 	{
 		g_all.infile = 0;
@@ -146,7 +144,6 @@ void	ptp_outfile(int i)
 {
 	g_all.is_outfile = 1;
 	g_all.outfile = open (g_all.array[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
-//	printf("outfile : %d, %s\n", g_all.outfile, g_all.array[i + 1]);
 	if (g_all.outfile <= 0)
 	{
 		g_all.is_outfile = 0;
@@ -161,7 +158,6 @@ void	ptp_append(int i)
 	g_all.is_outfile = 1;
 	g_all.outfile = open (g_all.array[i + 1],
 			O_RDWR | O_APPEND | O_CREAT, 0644);
-//	printf("append : %d, %s\n", g_all.outfile, g_all.array[i + 1]);
 	if (g_all.outfile <= 0)
 		ft_return(errno);
 	del_arg(i);
@@ -184,14 +180,12 @@ int	heredoc(void)
 			close(g_all.p[1]);
 			return (-1);
 		}
-	//	printf("--- %s\n", his);
 		if (strcmp (his, g_all.eof_heredoc) == 0 && his)
 		{
 			dup2(g_all.p[0], 0);
 			//close(g_all.p[1]);
 			j ++;
 		}
-		//if (strcmp (his, g_all.eof_heredoc) == 0 && his)
 		else if (his)
 		{
 			if (g_all.outfile)
@@ -213,7 +207,6 @@ int	heredoc(void)
 void	ptp_heredoc(int i)
 {
 	g_all.eof_heredoc = g_all.array[i + 1];
-	//printf("eof : %s\n", g_all.eof_heredoc);
 	heredoc();
 	del_arg(i);
 }
@@ -233,10 +226,9 @@ void	pipes(int last)
 	int	i;
 	int	j;
 
-	//write(1, "ah ouais..", 10);
 	pipe(g_all.p);
-	if (!g_all.path)
-		ft_exit(0);
+/* 	if (!g_all.path)
+		ft_exit(127); */
 	ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	j = fork();
 	if (j == -1)
@@ -258,11 +250,13 @@ void	pipes(int last)
 			ft_exit(126);
 		if (errno == 13 && ft_isalnum(g_all.commands[0][0]) != 0)
 			ft_exit(127);
-		if (i == 0)
-			ft_exit(errno);
-		if (i != 0)
+		else
 			exit(127);
-	}
+/* 		if (i == 0)
+			exit(127); // errno?
+		if (i != 0)
+			exit(127); */
+	}	
 	else
 	{
 		close(g_all.p[1]);
@@ -272,7 +266,6 @@ void	pipes(int last)
 		waitpid(j, NULL, 0);
 		//ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	}
-//  dup2(0, 1);
 	free_pipe();
 	if (last == 1)
 		dup2(1, 0);
@@ -303,31 +296,27 @@ void	args_fill(int i, int end)
 	while (i < end)
 	{
 		g_all.commands[j] = ft_strdup(g_all.array[i]);
-		if (ft_strncmp(g_all.commands[j], "'", 1) == 0
-			|| ft_strncmp(g_all.commands[j], "\"", 1) == 0)
+		if (ft_is_p_or_r_between_quotes(g_all.commands[j])
+			|| ft_quotes_jess(g_all.commands[j]))
 			ft_remove_quotes(g_all.commands[j]);
 		i ++;
 		j ++;
 	}
 	g_all.commands[j] = 0;
-	//remove comillas aqui (y expand $? ???)
 	where();
-	if (((ft_strcmp(g_all.commands[0], "exit") == 0) // justo al principio when no < > (al final no)
-		|| ((ft_strcmp(g_all.commands[0], "export") == 0 && g_all.outfile == 0))// con argumentos solo al principio when no < >
-		|| (ft_strcmp(g_all.commands[0], "cd") == 0) // anywhere
-		|| (ft_strcmp(g_all.commands[0], "unset") == 0)))
-	{
+	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
+			|| ((ft_strcmp(g_all.commands[0], "export") == 0
+					&& g_all.outfile == 0))
+			|| (ft_strcmp(g_all.commands[0], "cd") == 0)
+			|| (ft_strcmp(g_all.commands[0], "unset") == 0)))
 		ft_builtins(g_all.commands, g_all.array_pos);
-	}
 	else if (((g_all.is_outfile == 0 && g_all.outfile == 0)
 			|| (g_all.is_outfile == 1 && g_all.outfile > 0))
 		&& ((g_all.is_infile == 0 && g_all.infile == 0)
 			|| (g_all.is_infile == 1 && g_all.infile > 0)))
 	{
-		if (is_pipe() == 1 && g_all.path)
+		if (is_pipe() == 1)
 			pipes(0);
-		else if (g_all.path)
-			pipes(1);
 		else if (is_builtins(g_all.commands) == 1)
 		{
 			if (g_all.outfile > 0)
@@ -336,14 +325,13 @@ void	args_fill(int i, int end)
 			if (g_all.outfile > 0)
 				dup2(0, 1);
 		}
+		else
+			pipes(1);
 	}
-	//printf("varr %s\n", ft_get_var("?"));
-	//printf("err %d\n", g_all.error);
 	free_pipe();
 	g_all.size ++;
 	if (g_all.array[g_all.size])
 		split_pipe();
-//  dup2 (0, 1);
 }
 
 void	redirections(int i, int end)
@@ -387,7 +375,8 @@ void change_array(void)
 	i = 0;
 	while (g_all.array[i + 1])
 	{
-		if (ft_strcmp(g_all.array[i], "|") == 0 && ft_strcmp(g_all.array[i + 1], "<<") == 0)
+		if (ft_strcmp(g_all.array[i], "|") == 0
+			&& ft_strcmp(g_all.array[i + 1], "<<") == 0)
 		{
 			g_all.array[i] = ">";
 			while (g_all.array[i + 1])
@@ -409,9 +398,6 @@ int execute(void)
 		return (0);
 //	change_array();
 //	system("leaks minishell");
-/*  g_all.array_size = 0;
-	while (g_all.array[g_all.array_size])
-	g_all.array_size ++; */
 	g_all.i = 0;
 	g_all.j = 0;
 	g_all.error = 0;
