@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/28 16:00:31 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/29 13:57:15 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,8 +227,6 @@ void	pipes(int last)
 	int	j;
 
 	pipe(g_all.p);
-/* 	if (!g_all.path)
-		ft_exit(127); */
 	ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	j = fork();
 	if (j == -1)
@@ -252,10 +250,6 @@ void	pipes(int last)
 			ft_exit(127);
 		else
 			exit(127);
-/* 		if (i == 0)
-			exit(127); // errno?
-		if (i != 0)
-			exit(127); */
 	}	
 	else
 	{
@@ -310,7 +304,7 @@ void	args_fill(int i, int end)
 			|| (ft_strcmp(g_all.commands[0], "cd") == 0)
 			|| (ft_strcmp(g_all.commands[0], "unset") == 0)))
 		ft_builtins(g_all.commands, g_all.array_pos);
-	else if (((g_all.is_outfile == 0 && g_all.outfile == 0)
+	else if (((g_all.is_outfile == 0 && g_all.outfile == 0) // remove else
 			|| (g_all.is_outfile == 1 && g_all.outfile > 0))
 		&& ((g_all.is_infile == 0 && g_all.infile == 0)
 			|| (g_all.is_infile == 1 && g_all.infile > 0)))
@@ -367,36 +361,10 @@ void	split_pipe(void)
 	redirections(g_all.start_i, g_all.size - 1);
 }
 
-void change_array(void)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (g_all.array[i + 1])
-	{
-		if (ft_strcmp(g_all.array[i], "|") == 0
-			&& ft_strcmp(g_all.array[i + 1], "<<") == 0)
-		{
-			g_all.array[i] = ">";
-			while (g_all.array[i + 1])
-			{
-				j = i;
-				g_all.array[i + 1] = g_all.array[i];
-				i ++;
-				pipe(g_all.p);
-				g_all.outfile = g_all.p[1];
-			}
-		}
-		i ++;
-	}
-}
-
 int execute(void)
 {
 	if (!g_all.array[0])
 		return (0);
-//	change_array();
 //	system("leaks minishell");
 	g_all.i = 0;
 	g_all.j = 0;

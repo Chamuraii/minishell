@@ -79,6 +79,50 @@ int	ft_builtin_unset(char *str, char **array)
 	return (1);
 }
 
+int	ft_builtin_exit(char **array, int i)
+{
+	int	j;
+
+	j = 0;
+	if ((!i && ft_strcmp(array[1], "|")) || (i == 2 && ft_strcmp(array[1], "|")))
+	{
+		if (i == 2)
+			if (ft_strcmp(g_all.array[i - 2], "<"))
+				return (1);
+		while (ft_strcmp(g_all.array[i], "|") && g_all.array[i])
+			i++;
+		if (!ft_strcmp(g_all.array[i], "|"))
+			return (1);
+		else if (array[2] && array[1])
+		{
+			g_all.error = 1;
+			printf("exit: too many arguments\n");
+			return (1);
+		}
+		else if (array[1])
+		{
+			while (array[1][j])
+			{
+				if (ft_isalpha(array[1][j]) == 1)
+				{
+					g_all.error = 1;
+					printf("exit: %s: numeric argument required\n", array[1]);
+					exit(g_all.error);
+				}
+				j ++;
+			}
+			g_all.error = ft_atoi(array[1]);
+		}
+		else
+			g_all.error = 0;
+		printf("minishell exited with status: %d\n", g_all.error);
+		ft_free("exit");
+		exit(g_all.error);
+	}
+	else
+		return (1);
+}
+
 int	ft_builtins(char **array, int i)
 {
 	if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1)
@@ -95,27 +139,7 @@ int	ft_builtins(char **array, int i)
 	else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1))
 		return (ft_builtin_echo(array[0], array));
 	else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
-	{
-		if ((!i && ft_strcmp(array[1], "|")) || (i == 2 && ft_strcmp(array[1], "|")))
-		{
-			if (i == 2)
-				if (ft_strcmp(g_all.array[i - 2], "<"))
-					return (1);
-			while (ft_strcmp(g_all.array[i], "|") && g_all.array[i])
-				i++;
-			if (!ft_strcmp(g_all.array[i], "|"))
-				return (1);
-			if (array[1])
-				g_all.error = ft_atoi(array[1]);
-			else
-				g_all.error = 0;
-			printf("minishell exited with status: %d\n", g_all.error);
-			ft_free("exit");
-			exit(g_all.error);
-		}
-		else
-			return (1);
-	}
+		ft_builtin_exit(&array[0], i);
 	return (0);
 }
 

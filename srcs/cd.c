@@ -15,7 +15,7 @@ int	ft_builtin_cd(char *str, char **array, int i)
 			return (1);
 		str = array[1];
 		if (!str)
-				chdir(ft_get_var_exp("HOME"));
+			chdir(ft_get_var_exp("HOME"));
 		else if (array[2])
 			return (1);
 		else if (chdir(str) < 0)
