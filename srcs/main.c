@@ -11,7 +11,7 @@ char	*ft_readline_str(void)
 
 	dup2(1, 0);
 	str = ft_strdup("\033[0;35m$PWD\033[0;32m@\033"
-					 "[0;34mminishell\033[0;32m$ \033[1;97m");
+		 "[0;34mminishell\033[0;32m$ \033[1;97m");
 	str = ft_expand(&(str));
 	i = 0;
 	while (str[i] != '@')
@@ -49,7 +49,6 @@ int	ft_readline(void)
 	{
 		free(str);
 		printf("exit\n");
-		//ft_free("exit");
 		exit(0);
 	}
 	if (g_all.str[0])
@@ -59,8 +58,6 @@ int	ft_readline(void)
 	else
 		return (free(g_all.str), g_all.error = 258);
 	execute();
-	//ft_builtins(g_all.array);
-	//ft_free("no exit");
 	int i = 0;
 	while (g_all.array[i])
 	{

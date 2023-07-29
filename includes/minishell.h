@@ -133,6 +133,6 @@ int			execute(void);
 int			ft_quotes_jess(char *str);
 int			is_pipe(void);
 int			is_builtins(char **array);
-int			ft_return(int status);
+int			ft_return(int status, char *str);
 
 #endif

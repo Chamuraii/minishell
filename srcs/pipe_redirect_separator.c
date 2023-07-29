@@ -83,17 +83,17 @@ char	*ft_rseparator(int state, char **str, int i)
 	if (state == NQ)
 	{
 		if (!ft_strncmp((*str) + i, "|", 1))
-			return(ft_rseparator_1(str, i));
+			return (ft_rseparator_1(str, i));
 		else if (!ft_strncmp((*str) + i, "<<", 2))
-			return(ft_rseparator_2(str, i));
+			return (ft_rseparator_2(str, i));
 		else if (!ft_strncmp((*str) + i, ">>", 2))
-			return(ft_rseparator_3(str, i));
+			return (ft_rseparator_3(str, i));
 		else if (!ft_strncmp((*str) + i, "<>", 2))
-			return(ft_rseparator_4(str, i));
+			return (ft_rseparator_4(str, i));
 		else if (!ft_strncmp((*str) + i, "<", 1))
-			return(ft_rseparator_5(str, i));
+			return (ft_rseparator_5(str, i));
 		else if (!ft_strncmp((*str) + i, ">", 1))
-			return(ft_rseparator_6(str, i));
+			return (ft_rseparator_6(str, i));
 	}
 	return ((*str));
 }

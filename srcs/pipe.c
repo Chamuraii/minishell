@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/29 13:57:15 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/29 17:37:20 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,41 +19,44 @@ void	args_fill(int i, int end);
 
 int	ft_exit(int status)
 {
-	//printf("pid = %d\n", getpid());
-	if (status == 126 && ft_strcmp(g_all.commands[0], "") == 0)
+	if (status == 126 && (ft_strcmp(g_all.commands[0], "") == 0
+			|| ft_strcmp(g_all.commands[0], "..") == 0))
 	{
-		write(2, "error 127", 9);
+		write(2, "command not found", 17);
 		status = 127;
 	}
 	else if (status == 126 && ft_strcmp(g_all.commands[0], ".") != 0)
 		write(2, "is a directory", 15);
-	else if (status == 126 && ft_strcmp(g_all.commands[0], ".") == 0)
+	else if (status == 126)
 	{
 		write(2, "filename argument required", 26);
 		status = 2;
 	}
-	else if (status != 127)
-		write(2, strerror(status), strlen(strerror(status)));
 	else
 		write(2, "error 127", 9);
 	write(2, "\n", 1);
 	g_all.error = status;
-//	printf("status %d\n", g_all.error);
-	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
-//	printf("%s\n", ft_get_var("?"));
 	exit (status);
 }
 
-int	ft_return(int status)
+int	ft_return(int status, char *str)
 {
-	//printf("pid2 = %d\n", getpid());
-	if (status != 127)
+	if (status == 2)
+	{
+		write(2, "No such file or directory", 25);
+		status = 1;
+	}
+	else if (status != 127)
 		write(2, strerror(status), strlen(strerror(status)));
 	else
-		write(2, "error 127", 9);
+	{
+		if (ft_strrchr(str, '/'))
+			write(2, "No such file or directory", 25);
+		else
+			write(2, "command not found", 17);
+	}
 	write(2, "\n", 1);
 	g_all.error = status;
-//	printf("status %d\n", g_all.error);
 	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
 	return (status);
 }
@@ -82,17 +85,17 @@ char	*ft_strj(char *s1, char *s2)
 	return (str);
 }
 
-int where(void)
+int	where(void)
 {
 	int		i;
 	char	*temp;
-	char 	*jess_free_pls;
+	char	*split;
 
 	i = 0;
 	g_all.path = NULL;
-	jess_free_pls = ft_get_var_exp("PATH");
-	g_all.where = ft_split(jess_free_pls, ':');
-	free(jess_free_pls);
+	split = ft_get_var_exp("PATH");
+	g_all.where = ft_split(split, ':');
+	free(split);
 	while (g_all.where[i])
 	{
 		temp = ft_strj(g_all.where[i], "/");
@@ -113,7 +116,7 @@ int where(void)
 	if (g_all.commands[0])
 	{
 		if (!is_builtins(g_all.commands))
-			ft_return(127);
+			ft_return(127, g_all.commands[0]);
 	}
 	return (127);
 }
@@ -135,7 +138,7 @@ void	ptp_infile(int i)
 	if (g_all.infile <= 0)
 	{
 		g_all.infile = 0;
-		ft_return(errno);
+		ft_return(errno, NULL);
 	}
 	del_arg(i);
 }
@@ -148,7 +151,7 @@ void	ptp_outfile(int i)
 	{
 		g_all.is_outfile = 0;
 		g_all.outfile = 0;
-		ft_return(errno);
+		ft_return(errno, NULL);
 	}
 	del_arg(i);
 }
@@ -159,7 +162,7 @@ void	ptp_append(int i)
 	g_all.outfile = open (g_all.array[i + 1],
 			O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (g_all.outfile <= 0)
-		ft_return(errno);
+		ft_return(errno, NULL);
 	del_arg(i);
 }
 
@@ -225,12 +228,13 @@ void	pipes(int last)
 {
 	int	i;
 	int	j;
+	int	exit_status;
 
 	pipe(g_all.p);
 	ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	j = fork();
 	if (j == -1)
-		ft_return(errno);
+		ft_return(errno, NULL);
 	else if (j == 0)
 	{
 		close(g_all.p[0]);
@@ -244,10 +248,10 @@ void	pipes(int last)
 		if (i == 0)
 			execve(g_all.path, (char *const *) g_all.commands, g_all.env);
 		dup2(0, 1);
-		if (errno == 13 && ft_isalnum(g_all.commands[0][0]) == 0)
+		if (errno == 13)
 			ft_exit(126);
-		if (errno == 13 && ft_isalnum(g_all.commands[0][0]) != 0)
-			ft_exit(127);
+		else if (i == 1)
+			exit (0);
 		else
 			exit(127);
 	}	
@@ -257,8 +261,8 @@ void	pipes(int last)
 		dup2(g_all.p[0], 0);
 /*	  if (all->path)
 	free(all->path); */
-		waitpid(j, NULL, 0);
-		//ft_add_var(ft_strdup("?"), ft_strdup("0"));
+		waitpid(j, &exit_status, 0);
+		ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(WEXITSTATUS(exit_status))));
 	}
 	free_pipe();
 	if (last == 1)
@@ -300,26 +304,22 @@ void	args_fill(int i, int end)
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
 			|| ((ft_strcmp(g_all.commands[0], "export") == 0
-					&& g_all.outfile == 0))
+					&& g_all.outfile == 0
+					&& ft_strcmp(g_all.array[j], "|") != 0))
 			|| (ft_strcmp(g_all.commands[0], "cd") == 0)
 			|| (ft_strcmp(g_all.commands[0], "unset") == 0)))
+	{
 		ft_builtins(g_all.commands, g_all.array_pos);
-	else if (((g_all.is_outfile == 0 && g_all.outfile == 0) // remove else
+		ft_add_var(ft_strdup("?"), ft_strdup("0"));
+	}
+	if (((g_all.is_outfile == 0 && g_all.outfile == 0)
 			|| (g_all.is_outfile == 1 && g_all.outfile > 0))
 		&& ((g_all.is_infile == 0 && g_all.infile == 0)
 			|| (g_all.is_infile == 1 && g_all.infile > 0)))
 	{
 		if (is_pipe() == 1)
 			pipes(0);
-		else if (is_builtins(g_all.commands) == 1)
-		{
-			if (g_all.outfile > 0)
-				dup2(g_all.outfile, 1);
-			ft_builtins(g_all.commands, g_all.array_pos);
-			if (g_all.outfile > 0)
-				dup2(0, 1);
-		}
-		else
+		else if (ft_strcmp(g_all.commands[0], "cd") != 0)
 			pipes(1);
 	}
 	free_pipe();

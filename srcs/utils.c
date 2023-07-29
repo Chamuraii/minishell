@@ -2,7 +2,7 @@
 
 extern t_all	g_all;
 
-int ft_is_p_or_r(char *str)
+int	ft_is_p_or_r(char *str)
 {
 	if (!str)
 		return (0);
@@ -19,7 +19,7 @@ int ft_is_p_or_r(char *str)
 	return (0);
 }
 
-int ft_is_p_or_r_between_quotes(char *str)
+int	ft_is_p_or_r_between_quotes(char *str)
 {
 	if (!str)
 		return (0);
@@ -46,7 +46,7 @@ int ft_is_p_or_r_between_quotes(char *str)
 	return (0);
 }
 
-int ft_quotes_jess(char *str)
+int	ft_quotes_jess(char *str)
 {
 	if (!str)
 		return (0);
@@ -78,7 +78,7 @@ char	*ft_remove_quotes(char *str)
 	int		i;
 	int		state;
 	char	*str2;
-	int 	j;
+	int		j;
 
 	state = 0;
 	i = 0;
@@ -107,7 +107,7 @@ char	*ft_remove_quotes_2(char **str)
 	int		i;
 	int		state;
 	char	*str2;
-	int 	j;
+	int		j;
 
 	state = 0;
 	i = 0;
@@ -130,7 +130,6 @@ char	*ft_remove_quotes_2(char **str)
 	free(*str);
 	str2[++j] = 0;
 	return (str2);
-
 }
 
 int	ft_search_var(char *key)
@@ -152,4 +151,3 @@ int	ft_search_var(char *key)
 	free(key);
 	return (0);
 }
-

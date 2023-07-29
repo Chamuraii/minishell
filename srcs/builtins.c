@@ -115,7 +115,7 @@ int	ft_builtin_exit(char **array, int i)
 		}
 		else
 			g_all.error = 0;
-		printf("minishell exited with status: %d\n", g_all.error);
+		printf("minishell exited with status: %d\n", g_all.error % 256);
 		ft_free("exit");
 		exit(g_all.error);
 	}
@@ -128,7 +128,8 @@ int	ft_builtins(char **array, int i)
 	if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1)
 		|| !ft_strncmp(array[0], "ENV", ft_strlen("ENV") + 1))
 		return (ft_builtin_env(array));
-	if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1))
+	if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1)
+		|| !ft_strncmp(array[0], "PWD", ft_strlen("PWD") + 1))
 		return (ft_builtin_pwd(array));
 	else if (!ft_strncmp(array[0], "export", ft_strlen("export") + 1))
 		return (ft_builtin_export(array[0], array, i));
@@ -136,7 +137,8 @@ int	ft_builtins(char **array, int i)
 		return (ft_builtin_unset(array[0], array));
 	else if (!ft_strncmp(array[0], "cd", ft_strlen("cd") + 1))
 		return (ft_builtin_cd(array[0], array, i));
-	else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1))
+	else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1)
+		|| !ft_strncmp(array[0], "ECHO", ft_strlen("ECHO") + 1))
 		return (ft_builtin_echo(array[0], array));
 	else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
 		ft_builtin_exit(&array[0], i);
@@ -145,25 +147,24 @@ int	ft_builtins(char **array, int i)
 
 int	is_builtins(char **array)
 {
-	char	*str;
-
 	if (array[0])
 	{
-	str = array[0];
-		if (!ft_strncmp(str, "env", ft_strlen("env") + 1)
-			|| !ft_strncmp(str, "ENV", ft_strlen("ENV") + 1))
+		if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1)
+			|| !ft_strncmp(array[0], "ENV", ft_strlen("ENV") + 1))
 			return (1);
-		else if (!ft_strncmp(str, "pwd", ft_strlen("pwd") + 1))
+		else if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1)
+			|| !ft_strncmp(array[0], "PWD", ft_strlen("PWD") + 1))
 			return (1);
-		else if (!ft_strncmp(str, "export", ft_strlen("export") + 1))
+		else if (!ft_strncmp(array[0], "export", ft_strlen("export") + 1))
 			return (1);
-		else if (!ft_strncmp(str, "unset", ft_strlen("unset") + 1))
+		else if (!ft_strncmp(array[0], "unset", ft_strlen("unset") + 1))
 			return (1);
-		else if (!ft_strncmp(str, "cd", ft_strlen("cd") + 1))
+		else if (!ft_strncmp(array[0], "cd", ft_strlen("cd") + 1))
 			return (1);
-		else if (!ft_strncmp(str, "echo", ft_strlen("echo") + 1))
+		else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1)
+			|| !ft_strncmp(array[0], "ECHO", ft_strlen("ECHO") + 1))
 			return (1);
-		else if (!ft_strncmp(str, "exit", ft_strlen("exit") + 1))
+		else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
 			return (1);
 	}
 	return (0);
