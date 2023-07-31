@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/29 17:37:20 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/31 16:38:27 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ int	ft_return(int status, char *str)
 	}
 	write(2, "\n", 1);
 	g_all.error = status;
-	ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(g_all.error)));
+	char *exit_code = ft_itoa(g_all.error);
+	ft_add_var(ft_strdup("?"), ft_strdup(exit_code));
+	free(exit_code);
 	return (status);
 }
 
@@ -101,6 +103,7 @@ int	where(void)
 		temp = ft_strj(g_all.where[i], "/");
 		free(g_all.where[i]);
 		g_all.where[i] = ft_strj(temp, g_all.commands[0]);
+		free(temp);
 		if (access(g_all.where[i], F_OK) == 0 && g_all.commands[0])
 		{
 			g_all.path = g_all.where[i];
@@ -108,6 +111,7 @@ int	where(void)
 		}
 		i ++;
 	}
+	//free(g_all.where[i]);
 	if (access(g_all.commands[0], F_OK) == 0)
 	{
 		g_all.path = g_all.commands[0];
@@ -121,10 +125,12 @@ int	where(void)
 	return (127);
 }
 
-void	del_arg(int i)
+void	del_arg(int i, int j)
 {
 	while (g_all.array[i])
 	{
+		if (j != 0)
+			free(g_all.array[i]);
 		g_all.array[i] = g_all.array[i + 2];
 		i ++;
 	}
@@ -139,8 +145,10 @@ void	ptp_infile(int i)
 	{
 		g_all.infile = 0;
 		ft_return(errno, NULL);
+		del_arg(i, 0);
 	}
-	del_arg(i);
+	else
+		del_arg(i, 1);
 }
 
 void	ptp_outfile(int i)
@@ -149,11 +157,12 @@ void	ptp_outfile(int i)
 	g_all.outfile = open (g_all.array[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (g_all.outfile <= 0)
 	{
-		g_all.is_outfile = 0;
 		g_all.outfile = 0;
 		ft_return(errno, NULL);
+		del_arg(i, 0);
 	}
-	del_arg(i);
+	else
+		del_arg(i, 1);
 }
 
 void	ptp_append(int i)
@@ -162,8 +171,12 @@ void	ptp_append(int i)
 	g_all.outfile = open (g_all.array[i + 1],
 			O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (g_all.outfile <= 0)
+	{
 		ft_return(errno, NULL);
-	del_arg(i);
+		del_arg(i, 0);
+	}
+	else
+		del_arg(i, 1);
 }
 
 int	heredoc(void)
@@ -202,6 +215,7 @@ int	heredoc(void)
 				write(g_all.p[1], "\n", 1);
 			}
 		}
+		free(his);
 	}
 	close(g_all.p[1]);
 	return (0);
@@ -211,17 +225,30 @@ void	ptp_heredoc(int i)
 {
 	g_all.eof_heredoc = g_all.array[i + 1];
 	heredoc();
-	del_arg(i);
+	del_arg(i, 1);
 }
 
 void	free_pipe(void)
 {
+	int	i;
+
+	i = 0;
 	g_all.infile = 0;
 	g_all.is_infile = 0;
 	g_all.outfile = 0;
 	g_all.is_outfile = 0;
-	g_all.path = NULL;
-	g_all.commands = NULL;
+/* 	if (g_all.commands)
+	{
+		while(g_all.commands[i])
+		{
+			free(g_all.commands[i]);
+			i ++;
+		}
+		free(g_all.commands);
+	} */
+/* 	if (g_all.path)
+		free(g_all.path); */
+//	g_all.commands = NULL;
 }
 
 void	pipes(int last)
@@ -259,12 +286,20 @@ void	pipes(int last)
 	{
 		close(g_all.p[1]);
 		dup2(g_all.p[0], 0);
-/*	  if (all->path)
-	free(all->path); */
 		waitpid(j, &exit_status, 0);
-		ft_add_var(ft_strdup("?"), ft_strdup(ft_itoa(WEXITSTATUS(exit_status))));
+		int h = 0;
+		while (g_all.where[h])
+		{
+			free(g_all.where[h]);
+			h ++;
+		}
+		free(g_all.where);
+		char *exit_code = ft_itoa(WEXITSTATUS(exit_status));
+		ft_add_var(ft_strdup("?"), ft_strdup(exit_code));
+		free(exit_code);
 	}
 	free_pipe();
+//	close(g_all.p[0]);
 	if (last == 1)
 		dup2(1, 0);
 }
@@ -281,6 +316,7 @@ int	is_pipe(void)
 		else
 			return (1);
 	}
+	i = 0;
 	return (0);
 }
 
@@ -290,6 +326,7 @@ void	args_fill(int i, int end)
 
 	j = 0;
 	g_all.array_pos = i;
+	//system("leaks minishell");
 	g_all.commands = ft_calloc(end - i + 1, sizeof(char *));
 	while (i < end)
 	{
@@ -300,7 +337,8 @@ void	args_fill(int i, int end)
 		i ++;
 		j ++;
 	}
-	g_all.commands[j] = 0;
+	g_all.commands[j] = 0; // ?
+	//system("leaks minishell");
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
 			|| ((ft_strcmp(g_all.commands[0], "export") == 0
@@ -312,6 +350,7 @@ void	args_fill(int i, int end)
 		ft_builtins(g_all.commands, g_all.array_pos);
 		ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	}
+	//system("leaks minishell");
 	if (((g_all.is_outfile == 0 && g_all.outfile == 0)
 			|| (g_all.is_outfile == 1 && g_all.outfile > 0))
 		&& ((g_all.is_infile == 0 && g_all.infile == 0)
@@ -319,19 +358,28 @@ void	args_fill(int i, int end)
 	{
 		if (is_pipe() == 1)
 			pipes(0);
-		else if (ft_strcmp(g_all.commands[0], "cd") != 0)
+		else if (ft_strcmp(g_all.commands[0], "cd") != 0
+			&& ft_strcmp(g_all.commands[0], "exit") != 0)
 			pipes(1);
 	}
+	int h = 0;
+	while (g_all.commands[h])
+	{
+		free(g_all.commands[h]);
+		h ++;
+	}
+	free(g_all.commands);
 	free_pipe();
 	g_all.size ++;
 	if (g_all.array[g_all.size])
 		split_pipe();
+//	system("leaks minishell");
 }
 
 void	redirections(int i, int end)
 {
 	g_all.size = end;
-	free_pipe();
+	//free_pipe();
 	while (i < g_all.size)
 	{
 		if (ft_strncmp(g_all.array[i], "<<", 2) == 0)
@@ -345,10 +393,12 @@ void	redirections(int i, int end)
 		else
 			i ++;
 	}
+//	system("leaks minishell");
 	if (g_all.array[g_all.size + 1])
 		args_fill(g_all.start_i, g_all.size);
 	else if (g_all.array[0])
 		args_fill(g_all.start_i, g_all.size + 1);
+//	system("leaks minishell");
 }
 
 void	split_pipe(void)
@@ -363,9 +413,9 @@ void	split_pipe(void)
 
 int execute(void)
 {
+	//system("leaks minishell");
 	if (!g_all.array[0])
 		return (0);
-//	system("leaks minishell");
 	g_all.i = 0;
 	g_all.j = 0;
 	g_all.error = 0;
@@ -374,5 +424,7 @@ int execute(void)
 	g_all.size = 0;
 	dup2(0, 1);
 	split_pipe();
+	//system("leaks minishell");
+	//free(g_all.commands);
 	return (1);
 }

@@ -67,6 +67,7 @@ int	ft_readline(void)
 	free(g_all.array);
 	free(str);
 	free(g_all.str);
+	//system("leaks minishell");
 	return (0);
 }
 
@@ -78,5 +79,8 @@ int	main(int argc, char **argv, char **env)
 	ft_var_init();
 	ft_init_env(env);
 	while (1)
+	{
 		ft_readline();
+		system("leaks minishell");
+	}
 }

@@ -146,7 +146,7 @@ int	ft_builtin_exit(char **array, int i)
 		}
 		else
 			g_all.error = 0;
-		printf("minishell exited with status: %d\n", g_all.error % 256);
+	//	printf("minishell exited with status: %d\n", g_all.error % 256);
 		ft_free("exit");
 		exit(g_all.error);
 	}
