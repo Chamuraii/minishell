@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/31 16:38:27 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/07/31 16:52:17 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,6 +349,13 @@ void	args_fill(int i, int end)
 	{
 		ft_builtins(g_all.commands, g_all.array_pos);
 		ft_add_var(ft_strdup("?"), ft_strdup("0"));
+		int h = 0;
+		while (g_all.where[h])
+		{
+			free(g_all.where[h]);
+			h ++;
+		}
+		free(g_all.where);
 	}
 	//system("leaks minishell");
 	if (((g_all.is_outfile == 0 && g_all.outfile == 0)
