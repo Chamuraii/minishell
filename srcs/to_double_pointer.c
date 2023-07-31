@@ -31,7 +31,17 @@ char	*ft_expand(char **str)
 	return ((*str));
 }
 
-char	*ft_reassign(char **str, char *next_str, int cnt)
+int	ft_dont_expand(char *str, int i)
+{
+	while (str[i] != '=' && str[i] && !ft_isspace(str[i]))
+		i++;
+	if (str[i] == '=')
+		return (1);
+	else
+		return (0);
+}
+
+char	*ft_reassign(char **str, char **array, int cnt)
 {
 	int		i;
 
@@ -48,15 +58,18 @@ char	*ft_reassign(char **str, char *next_str, int cnt)
 		{
 			if ((*str)[i] == '$')
 			{
-				(*str) = ft_expand(str);
-				i = -1;
+				if (!ft_dont_expand(*str, i))
+				{
+					*str = ft_expand(str);
+					i = -1;
+				}
 			}
 		}
 		i++;
 	}
 	if (!ft_is_p_or_r_between_quotes(*str) && !ft_quotes_jess(*str))
 		(*str) = ft_remove_quotes_2(str);
-	if (!next_str && cnt == 0)
+	if (!array[i + 1] && cnt == 0)
 		ft_var_declare((*str));
 	return ((*str));
 }
@@ -70,7 +83,7 @@ char	**to_double_pointer(char **str)
 	array = ft_split((*str), ' ');
 	while (array[i])
 	{
-		array[i] = ft_reassign(&(array[i]), array[i + 1], i);
+		array[i] = ft_reassign(&(array[i]), array, i);
 		i++;
 	}
 	return (array);

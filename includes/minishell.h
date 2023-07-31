@@ -25,10 +25,10 @@
 # define DQI	2
 # define DQC	3
 
-# define SQ  39
-# define SQO 4
-# define SQI 5
-# define SQC 6
+# define SQ		39
+# define SQO	4
+# define SQI	5
+# define SQC	6
 
 // TODO
 //  ------
@@ -79,7 +79,7 @@ int			is_builtins(char **str);
 int			ft_builtin_env(char **array);
 int			ft_builtin_pwd(char **array);
 int			ft_builtin_export(char *str, char **array, int i);
-int			ft_builtin_unset(char *str, char **array);
+int			ft_builtin_unset(char *str, char **array, int i);
 int			ft_builtin_cd(char *str, char **array, int i);
 int			ft_builtin_echo(char *str, char **array);
 t_varlist	*ft_create_node(char *key, char *value);
@@ -96,29 +96,29 @@ void		ft_error_messages(void);
 void		ft_var_init(void);
 void		ft_init_env(char **denv);
 int			ft_readline(void);
-char		*ft_rseparator_1(char **str, int i);
-char		*ft_rseparator_2(char **str, int i);
-char		*ft_rseparator_3(char **str, int i);
-char		*ft_rseparator_4(char **str, int i);
-char		*ft_rseparator_5(char **str, int i);
-char		*ft_rseparator_6(char **str, int i);
+char		*ft_rseparator_pipe(char **str, int i);
+char		*ft_rseparator_heredoc(char **str, int i);
+char		*ft_rseparator_append(char **str, int i);
+char		*ft_rseparator_infile_prio(char **str, int i);
+char		*ft_rseparator_infile(char **str, int i);
+char		*ft_rseparator_outfile(char **str, int i);
 char		*ft_rseparator(int state, char **str, int i);
 int			ft_squote_state(char c, int old_state);
 int			ft_dquote_state(char c, int old_state);
 int			ft_quote_state(char c, int old_state);
 void		ft_expander_val(char *str, int i);
-int			ft_rvalidator_1(char **str, int i);
-int			ft_rvalidator_2(char **str, int i);
-int			ft_rvalidator_3(char **str, int i);
-int			ft_rvalidator_4(char **str, int i);
-int			ft_rvalidator_5(char **str, int i);
+int			ft_rvalidator_pipe(char **str, int i);
+int			ft_rvalidator_append(char **str, int i);
+int			ft_rvalidator_heredoc(char **str, int i);
+int			ft_rvalidator_infile(char **str, int i);
+int			ft_rvalidator_outfile(char **str, int i);
 int			ft_qvalidator(char **str);
 int			ft_rvalidator(char **str, int i);
 void		ft_sigint_handler(int signal);
 void		ft_signals(void);
 char		*ft_change_str(char **str, const char *str2);
 char		*ft_expand(char **str);
-char		*ft_reassign(char **str, char *next_str, int cnt);
+char		*ft_reassign(char **str, char **array, int cnt);
 char		**to_double_pointer(char **str);
 void		ft_del_var(char *key);
 int			ft_is_p_or_r(char *str);

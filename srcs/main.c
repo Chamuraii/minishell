@@ -48,7 +48,7 @@ int	ft_readline(void)
 	if (!g_all.str)
 	{
 		free(str);
-		printf("exit\n");
+		printf("\nexit\n");
 		exit(0);
 	}
 	if (g_all.str[0])

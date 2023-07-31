@@ -2,7 +2,7 @@
 
 extern t_all	g_all;
 
-int	ft_rvalidator_1(char **str, int i)
+int	ft_rvalidator_pipe(char **str, int i)
 {
 	int	ward;
 
@@ -24,7 +24,7 @@ int	ft_rvalidator_1(char **str, int i)
 	return (1);
 }
 
-int	ft_rvalidator_2(char **str, int i)
+int	ft_rvalidator_append(char **str, int i)
 {
 	i += ft_strlen(">>");
 	while (ft_isspace((*str)[i]))
@@ -34,7 +34,7 @@ int	ft_rvalidator_2(char **str, int i)
 	return (1);
 }
 
-int	ft_rvalidator_3(char **str, int i)
+int	ft_rvalidator_heredoc(char **str, int i)
 {
 	i += ft_strlen("<<");
 	while (ft_isspace((*str)[i]))
@@ -44,7 +44,7 @@ int	ft_rvalidator_3(char **str, int i)
 	return (1);
 }
 
-int	ft_rvalidator_4(char **str, int i)
+int	ft_rvalidator_infile(char **str, int i)
 {
 	i += ft_strlen("<");
 	while (ft_isspace((*str)[i]))
@@ -64,7 +64,7 @@ int	ft_rvalidator_4(char **str, int i)
 	return (1);
 }
 
-int	ft_rvalidator_5(char **str, int i)
+int	ft_rvalidator_outfile(char **str, int i)
 {
 	i += ft_strlen(">");
 	while (ft_isspace((*str)[i]))

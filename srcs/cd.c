@@ -15,15 +15,17 @@ int	ft_builtin_cd(char *str, char **array, int i)
 			return (1);
 		str = array[1];
 		if (!str)
-			chdir(ft_get_var_exp("HOME"));
+			str = ft_get_var_exp("HOME");
+		else if (!ft_strcmp(str, "-"))
+			str = ft_get_var_exp("OLDPWD");
 		else if (array[2])
 			return (1);
-		else if (chdir(str) < 0)
+		if (chdir(str) < 0)
 		{
 			printf("cd: %s: %s\n", strerror(errno), str);
 			return (1);
 		}
-		if (ft_strcmp(ft_get_var(ft_strdup("PWD")), ft_get_var(ft_strdup("OLDPWD"))))
+		if (ft_strcmp(ft_get_var("PWD"), ft_get_var("OLDPWD")))
 		{
 			ft_add_var(ft_strdup("OLDPWD"), ft_strdup(ft_get_var("PWD")));
 			ft_add_var_exp(ft_strdup("OLDPWD"), ft_strdup(ft_get_var("PWD")));

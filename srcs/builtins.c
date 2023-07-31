@@ -33,6 +33,24 @@ int	ft_builtin_pwd(char **array)
 	return (1);
 }
 
+int	ft_didnt_expand_exp(char *str)
+{
+	char *str2;
+	char *str3;
+
+	str2 = ft_strdup(str);
+	str3 = ft_strstr(str2, "=");
+	*str3 = 0;
+	if (!str2)
+		return (0);
+	if (!str3)
+		return (free(str2), 0);
+	if (ft_strstr(str2, "$"))
+		return (free(str2), 1);
+	else
+		return (free(str2), 0);
+}
+
 int	ft_builtin_export(char *str, char **array, int i)
 {
 	t_varlist	*head;
@@ -56,6 +74,8 @@ int	ft_builtin_export(char *str, char **array, int i)
 		return (1);
 	if (ft_strstr(array[1], "="))
 	{
+		if (ft_didnt_expand_exp(array[1]))
+			return (1);
 		if (str[0] == '=')
 			return (1);
 		ft_var_declare(ft_strdup(array[1]));
@@ -68,14 +88,25 @@ int	ft_builtin_export(char *str, char **array, int i)
 	return (1);
 }
 
-int	ft_builtin_unset(char *str, char **array)
+int	ft_builtin_unset(char *str, char **array, int i)
 {
-	str = array[1];
-	if (!str)
+	if (!i || i == 2)
+	{
+		if (i == 2)
+			if (ft_strcmp(g_all.array[i - 2], "<"))
+				return (1);
+		while (ft_strcmp(g_all.array[i], "|") && g_all.array[i])
+			i++;
+		if (!ft_strcmp(g_all.array[i], "|"))
+			return (1);
+		str = array[1];
+		if (!str)
+			return (1);
+		if (!ft_strncmp(str, "PWD", ft_strlen("PWD")))
+			ft_add_var_exp(ft_strdup("OLDPWD"), ft_strdup(ft_get_var_exp("PWD")));
+		ft_del_var(ft_strdup(str));
 		return (1);
-	if (!ft_strncmp(str, "PWD", ft_strlen("PWD")))
-		ft_add_var_exp(ft_strdup("OLDPWD"), ft_strdup(ft_get_var_exp("PWD")));
-	ft_del_var(ft_strdup(str));
+	}
 	return (1);
 }
 
@@ -84,7 +115,7 @@ int	ft_builtin_exit(char **array, int i)
 	int	j;
 
 	j = 0;
-	if ((!i && ft_strcmp(array[1], "|")) || (i == 2 && ft_strcmp(array[1], "|")))
+	if (!i || i == 2)
 	{
 		if (i == 2)
 			if (ft_strcmp(g_all.array[i - 2], "<"))
@@ -134,7 +165,7 @@ int	ft_builtins(char **array, int i)
 	else if (!ft_strncmp(array[0], "export", ft_strlen("export") + 1))
 		return (ft_builtin_export(array[0], array, i));
 	else if (!ft_strncmp(array[0], "unset", ft_strlen("unset") + 1))
-		return (ft_builtin_unset(array[0], array));
+		return (ft_builtin_unset(array[0], array, i));
 	else if (!ft_strncmp(array[0], "cd", ft_strlen("cd") + 1))
 		return (ft_builtin_cd(array[0], array, i));
 	else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1)

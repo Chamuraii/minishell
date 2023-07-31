@@ -7,14 +7,14 @@ int	ft_rvalidator(char **str, int i)
 	while (ft_isspace((*str)[i]))
 		i++;
 	if (!ft_strncmp(((*str) + i), "|", ft_strlen("|")))
-		return (ft_rvalidator_1(str, i));
+		return (ft_rvalidator_pipe(str, i));
 	if (!ft_strncmp(((*str) + i), ">>", ft_strlen(">>")))
-		return (ft_rvalidator_2(str, i));
+		return (ft_rvalidator_append(str, i));
 	if (!ft_strncmp(((*str) + i), "<<", ft_strlen("<<")))
-		return (ft_rvalidator_3(str, i));
+		return (ft_rvalidator_heredoc(str, i));
 	if (!ft_strncmp(((*str) + i), "<", ft_strlen("<")))
-		return (ft_rvalidator_4(str, i));
+		return (ft_rvalidator_infile(str, i));
 	if (!ft_strncmp(((*str) + i), ">", ft_strlen(">")))
-		return (ft_rvalidator_5(str, i));
+		return (ft_rvalidator_outfile(str, i));
 	return (1);
 }

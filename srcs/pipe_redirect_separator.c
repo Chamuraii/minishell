@@ -2,7 +2,7 @@
 
 extern t_all	g_all;
 
-char	*ft_rseparator_1(char **str, int i)
+char	*ft_rseparator_pipe(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
@@ -21,7 +21,7 @@ char	*ft_rseparator_1(char **str, int i)
 	return ((*str));
 }
 
-char	*ft_rseparator_2(char **str, int i)
+char	*ft_rseparator_heredoc(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
@@ -40,7 +40,7 @@ char	*ft_rseparator_2(char **str, int i)
 	return ((*str));
 }
 
-char	*ft_rseparator_3(char **str, int i)
+char	*ft_rseparator_append(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
@@ -59,7 +59,7 @@ char	*ft_rseparator_3(char **str, int i)
 	return ((*str));
 }
 
-char	*ft_rseparator_4(char **str, int i)
+char	*ft_rseparator_infile_prio(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
@@ -83,17 +83,17 @@ char	*ft_rseparator(int state, char **str, int i)
 	if (state == NQ)
 	{
 		if (!ft_strncmp((*str) + i, "|", 1))
-			return (ft_rseparator_1(str, i));
+			return (ft_rseparator_pipe(str, i));
 		else if (!ft_strncmp((*str) + i, "<<", 2))
-			return (ft_rseparator_2(str, i));
+			return (ft_rseparator_heredoc(str, i));
 		else if (!ft_strncmp((*str) + i, ">>", 2))
-			return (ft_rseparator_3(str, i));
+			return (ft_rseparator_append(str, i));
 		else if (!ft_strncmp((*str) + i, "<>", 2))
-			return (ft_rseparator_4(str, i));
+			return (ft_rseparator_infile_prio(str, i));
 		else if (!ft_strncmp((*str) + i, "<", 1))
-			return (ft_rseparator_5(str, i));
+			return (ft_rseparator_infile(str, i));
 		else if (!ft_strncmp((*str) + i, ">", 1))
-			return (ft_rseparator_6(str, i));
+			return (ft_rseparator_outfile(str, i));
 	}
 	return ((*str));
 }

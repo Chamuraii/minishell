@@ -2,7 +2,7 @@
 
 extern t_all	g_all;
 
-char	*ft_rseparator_5(char **str, int i)
+char	*ft_rseparator_infile(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
@@ -21,7 +21,7 @@ char	*ft_rseparator_5(char **str, int i)
 	return ((*str));
 }
 
-char	*ft_rseparator_6(char **str, int i)
+char	*ft_rseparator_outfile(char **str, int i)
 {
 	char	*str2;
 	char	*str3;
