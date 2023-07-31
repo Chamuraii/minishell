@@ -341,21 +341,23 @@ void	args_fill(int i, int end)
 	//system("leaks minishell");
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
-			|| ((ft_strcmp(g_all.commands[0], "export") == 0
+			|| ((ft_strcmp(g_all.commands[0], "export")) == 0
 					&& g_all.outfile == 0
+					&& g_all.commands[1]
 					&& ft_strcmp(g_all.array[j], "|") != 0))
 			|| (ft_strcmp(g_all.commands[0], "cd") == 0)
-			|| (ft_strcmp(g_all.commands[0], "unset") == 0)))
+			|| ((ft_strcmp(g_all.commands[0], "unset") == 0)
+			   && g_all.commands[1]))
 	{
 		ft_builtins(g_all.commands, g_all.array_pos);
 		ft_add_var(ft_strdup("?"), ft_strdup("0"));
 		int h = 0;
 		while (g_all.where[h])
 		{
-			free(g_all.where[h]);
+			//free(g_all.where[h]);
 			h ++;
 		}
-		free(g_all.where);
+		//free(g_all.where);
 	}
 	//system("leaks minishell");
 	if (((g_all.is_outfile == 0 && g_all.outfile == 0)

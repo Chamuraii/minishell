@@ -1,5 +1,0 @@
-/Users/jorgfern/CLionProjects/Pan_and_chamuraii_minishell/cmake-build-debug/CMakeFiles/LIBFT.dir
-/Users/jorgfern/CLionProjects/Pan_and_chamuraii_minishell/cmake-build-debug/CMakeFiles/MINISHELL.dir
-/Users/jorgfern/CLionProjects/Pan_and_chamuraii_minishell/cmake-build-debug/CMakeFiles/minishell.dir
-/Users/jorgfern/CLionProjects/Pan_and_chamuraii_minishell/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/jorgfern/CLionProjects/Pan_and_chamuraii_minishell/cmake-build-debug/CMakeFiles/rebuild_cache.dir
