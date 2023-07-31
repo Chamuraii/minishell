@@ -55,7 +55,6 @@ int	ft_builtin_export(char *str, char **array, int i)
 {
 	t_varlist	*head;
 
-	(void)str;
 	if (!array[1])
 	{
 		head = g_all.exported_list[0];
@@ -78,13 +77,16 @@ int	ft_builtin_export(char *str, char **array, int i)
 			return (1);
 		if (str[0] == '=')
 			return (1);
-		ft_var_declare(ft_strdup(array[1]));
-		ft_var_declare_exp(ft_strdup(array[1]));
-		return (1);
+		str = ft_strdup(array[1]);
+		ft_var_declare(str);
+		free(str);
+		str = ft_strdup(array[1]);
+		ft_var_declare_exp(str);
+		return (free(str), 1);
 	}
 	if (!ft_search_var(ft_strdup(array[1])))
 		return (1);
-	ft_add_var_exp(ft_strdup(array[1]), ft_get_var(ft_strdup(array[1])));
+	ft_add_var_exp(ft_strdup(array[1]), ft_get_var(array[1]));
 	return (1);
 }
 
