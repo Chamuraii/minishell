@@ -113,3 +113,11 @@ char	*ft_remove_quotes(char *str)
 	str2[i] = 0;
 	return (str2);
 }
+
+int	ft_q_error_message(char **str, int i)
+{
+	printf("syntax error near unexpected token: `%c' \n", (*str)[i]);
+	g_all.error = 258;
+	ft_add_var(ft_strdup("?"), ft_strdup("258"));
+	return (0);
+}

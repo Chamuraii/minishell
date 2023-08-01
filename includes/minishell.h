@@ -134,6 +134,7 @@ int			is_builtins(char **array);
 int			ft_dont_expand(char *str, int i);
 int			ft_return(int status, char *str);
 int			ft_get_state(char *str, int j);
+int			ft_q_error_message(char **str, int i);
 
 // execute.c
 

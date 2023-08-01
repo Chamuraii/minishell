@@ -84,16 +84,11 @@ int	ft_qvalidator(char **str)
 	{
 		state = ft_quote_state((*str)[i], state);
 		if (!ft_qvalidator_2(state, str, i))
-		{
-			printf("syntax error near unexpected token: `%c' \n", (*str)[i]);
-			g_all.error = 258;
-			ft_add_var(ft_strdup("?"), ft_strdup("258"));
-			return (0);
-		}
+			return (ft_q_error_message(str, i));
 		i++;
 	}
 	if (state == DQC || state == SQC || state == NQ)
 		return (1);
 	else
-		return (0);
+		return (ft_q_error_message(str, i));
 }

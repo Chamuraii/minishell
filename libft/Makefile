@@ -20,16 +20,13 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(AR) $(NAME) $(OBJ)
-	@echo Making Libft...
 bonus: $(OBJBON) $(OBJ)
 	@$(AR) $(NAME) $(OBJBON) $(OBJ)
 	@echo Making Libft bonus...
 clean:
 	@rm -rf *.o
-	@echo Deleting Libft .o files
 fclean: clean
 	@rm -f $(NAME)
-	@echo Deleting Libft.a file
 
 %.o: %.c
 	@gcc $(CFLAGS) -o $@ -c $<
