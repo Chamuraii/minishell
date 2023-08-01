@@ -378,7 +378,6 @@ could be executed right away (some builtins) */
 
 void	is_execve(int j)
 {
-	int i = 0;
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
 			|| ((ft_strcmp(g_all.commands[0], "export")) == 0
@@ -390,7 +389,7 @@ void	is_execve(int j)
 			&& g_all.commands[1]))
 	{
 		ft_builtins(g_all.commands, g_all.array_pos);
-		ft_add_var(ft_strdup("?"), ft_strdup("0"));
+		ft_add_var(ft_strdup("?"), ft_itoa(g_all.error));
 	}
 	if (((g_all.is_outfile == 0 && g_all.outfile == 0)
 			|| (g_all.is_outfile == 1 && g_all.outfile > 0))
@@ -400,12 +399,9 @@ void	is_execve(int j)
 		if (is_pipe() == 1)
 			pipes(0);
 		else if ((ft_strcmp(g_all.commands[0], "cd") != 0
-			&& ft_strcmp(g_all.commands[0], "exit") != 0)) {
-			if (((ft_strcmp(g_all.commands[0], "export")) == 0 && g_all.commands[1]))
-				i ++;
-//			else if ((ft_strcmp(g_all.commands[0], "export")) == 0 && !g_all.commands[1])
-//				pipes(1);
-			else
+			&& ft_strcmp(g_all.commands[0], "exit") != 0))
+		{
+			if (!((ft_strcmp(g_all.commands[0], "export")) == 0 && g_all.commands[1]))
 				pipes(1);
 		}
 	}
@@ -423,7 +419,7 @@ void	args_fill(int i, int end, int j)
 		g_all.commands[j] = ft_strdup(g_all.array[i]);
 		if (ft_is_p_or_r_between_quotes(g_all.commands[j])
 			|| ft_quotes_jess(g_all.commands[j]))
-			ft_remove_quotes(g_all.commands[j]);
+			g_all.commands[j] = ft_remove_quotes_2(&g_all.commands[j]);
 		i ++;
 		j ++;
 	}

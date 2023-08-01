@@ -20,16 +20,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ed66ee3-847d-4f97-b11f-2a38c672c998" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/minishell.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/minishell.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/builtins_2.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/builtins_2.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/expand.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/expand.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/export.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/export.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/pipe.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/pipe.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/to_double_pointer.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/to_double_pointer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/utils_2.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/utils_2.c" afterDir="false" />
-    </list>
+    <list default="true" id="8ed66ee3-847d-4f97-b11f-2a38c672c998" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -144,7 +135,7 @@
       <workItem from="1690815368005" duration="3386000" />
       <workItem from="1690886609199" duration="3540000" />
       <workItem from="1690890198653" duration="1579000" />
-      <workItem from="1690902509236" duration="2242000" />
+      <workItem from="1690902509236" duration="2346000" />
     </task>
     <servers />
   </component>

@@ -47,14 +47,17 @@ int	ft_builtin_cd(char *str, char **array, int i)
 			i++;
 		if (!ft_strcmp(g_all.array[i], "|"))
 			return (1);
-		str = array[1];
-		if (!str)
+		if (!array[1])
 			str = ft_get_var_exp("HOME");
-		else if (!ft_strcmp(str, "-"))
+		else if (!ft_strcmp(array[1], "-"))
 			str = ft_get_var_exp("OLDPWD");
 		else if (array[2])
 			return (1);
+		else
+			str = array[1];
 		ft_builtin_cd_2(str);
+		if (!array[1] || !ft_strcmp(array[1], "-"))
+			free(str);
 	}
 	return (1);
 }

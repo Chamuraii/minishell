@@ -16,7 +16,7 @@ extern t_all	g_all;
 
 int	ft_builtin_echo_2(char *str, char **array, int flag_bool, int i)
 {
-	while (!ft_is_p_or_r(array[i]) && array[i])
+	while (array[i])
 	{
 		str = array[i];
 		printf("%s", str);

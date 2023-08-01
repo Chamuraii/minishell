@@ -62,7 +62,7 @@ int	ft_builtin_exit2(char **array, int j)
 		{
 			if (ft_isdigit(array[1][j]) != 1)
 			{
-				g_all.error = 1;
+				g_all.error = 255;
 				printf("exit: %s: numeric argument required\n", array[1]);
 				exit(g_all.error);
 			}
