@@ -5,6 +5,7 @@ extern t_all	g_all;
 int	ft_builtin_cd(char *str, char **array, int i)
 {
 	char	*str2;
+
 	if (!i || i == 2)
 	{
 		if (i == 2)

@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/07/31 16:52:17 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/08/01 12:42:07 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	ft_exit(int status)
 
 int	ft_return(int status, char *str)
 {
+	char	*exit_code;
+
 	if (status == 2)
 	{
 		write(2, "No such file or directory", 25);
@@ -57,7 +59,7 @@ int	ft_return(int status, char *str)
 	}
 	write(2, "\n", 1);
 	g_all.error = status;
-	char *exit_code = ft_itoa(g_all.error);
+	exit_code = ft_itoa(g_all.error);
 	ft_add_var(ft_strdup("?"), ft_strdup(exit_code));
 	free(exit_code);
 	return (status);
@@ -111,7 +113,6 @@ int	where(void)
 		}
 		i ++;
 	}
-	//free(g_all.where[i]);
 	if (access(g_all.commands[0], F_OK) == 0)
 	{
 		g_all.path = g_all.commands[0];
@@ -127,14 +128,17 @@ int	where(void)
 
 void	del_arg(int i, int j)
 {
+	j ++;
 	while (g_all.array[i])
 	{
-		if (j != 0)
-			free(g_all.array[i]);
+		if (g_all.red == 0)
+			//free(g_all.array[i]);
+			printf("freeing %s\n", g_all.array[i]);
 		g_all.array[i] = g_all.array[i + 2];
 		i ++;
 	}
 	g_all.size -= 2;
+	g_all.red ++;
 }
 
 void	ptp_infile(int i)
@@ -287,13 +291,13 @@ void	pipes(int last)
 		close(g_all.p[1]);
 		dup2(g_all.p[0], 0);
 		waitpid(j, &exit_status, 0);
-		int h = 0;
+/* 		int h = 0;
 		while (g_all.where[h])
 		{
 			free(g_all.where[h]);
 			h ++;
 		}
-		free(g_all.where);
+		free(g_all.where); */
 		char *exit_code = ft_itoa(WEXITSTATUS(exit_status));
 		ft_add_var(ft_strdup("?"), ft_strdup(exit_code));
 		free(exit_code);
@@ -342,22 +346,15 @@ void	args_fill(int i, int end)
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
 			|| ((ft_strcmp(g_all.commands[0], "export")) == 0
-					&& g_all.outfile == 0
-					&& g_all.commands[1]
-					&& ft_strcmp(g_all.array[j], "|") != 0))
-			|| (ft_strcmp(g_all.commands[0], "cd") == 0)
-			|| ((ft_strcmp(g_all.commands[0], "unset") == 0)
-			   && g_all.commands[1]))
+				&& g_all.outfile == 0
+				&& g_all.commands[1]
+				&& ft_strcmp(g_all.array[j], "|") != 0))
+		|| (ft_strcmp(g_all.commands[0], "cd") == 0)
+		|| ((ft_strcmp(g_all.commands[0], "unset") == 0)
+			&& g_all.commands[1]))
 	{
 		ft_builtins(g_all.commands, g_all.array_pos);
 		ft_add_var(ft_strdup("?"), ft_strdup("0"));
-		int h = 0;
-		while (g_all.where[h])
-		{
-			//free(g_all.where[h]);
-			h ++;
-		}
-		//free(g_all.where);
 	}
 	//system("leaks minishell");
 	if (((g_all.is_outfile == 0 && g_all.outfile == 0)
@@ -372,11 +369,22 @@ void	args_fill(int i, int end)
 			pipes(1);
 	}
 	int h = 0;
-	while (g_all.commands[h])
+	while (g_all.where[h])
 	{
-		free(g_all.commands[h]);
+		free(g_all.where[h]);
 		h ++;
 	}
+	free(g_all.where);
+	h = 0;
+	while (g_all.commands[h])
+	{
+		printf("free %s\n", g_all.commands[h]);
+		//if (ft_strcmp(g_all.commands[0], "cd") != 0)
+			free(g_all.commands[h]);
+		h ++;
+	}
+//	if (ft_strcmp(g_all.commands[0], "cd") == 0)
+	//	free(g_all.commands[0]);
 	free(g_all.commands);
 	free_pipe();
 	g_all.size ++;
@@ -427,6 +435,7 @@ int execute(void)
 		return (0);
 	g_all.i = 0;
 	g_all.j = 0;
+	g_all.red = 0;
 	g_all.error = 0;
 	g_all.start_i = 0;
 	g_all.end_i = 0;

@@ -49,7 +49,6 @@ typedef struct s_all
 	int 				array_pos;
 	//pipex
 	char				**commands;
-	char				**recep;
 	char				**where;
 	char				*path;
 	int					infile;
@@ -62,6 +61,7 @@ typedef struct s_all
 	int					p[2];
 	int					i;
 	int					j;
+	int					red;
 	int					size;
 	int					start_i;
 	int					end_i;
