@@ -44,6 +44,8 @@ int	ft_didnt_expand_exp(char *str)
 	char	*str2;
 	char	*str3;
 
+	if (!str)
+		return (0);
 	str2 = ft_strdup(str);
 	str3 = ft_strstr(str2, "=");
 	*str3 = 0;
@@ -59,10 +61,12 @@ int	ft_builtin_export_2(char *str, char **array)
 {
 	if (ft_strstr(array[1], "="))
 	{
-		if (ft_didnt_expand_exp(array[1]))
+		if (ft_didnt_expand_exp(array[1]) || array[1][0] == '=' || !ft_isalpha(array[1][0]))
+		{
+			printf("export: `%s': not a valid identifier\n", array[1]);
+			g_all.error = 1;
 			return (1);
-		if (str[0] == '=')
-			return (1);
+		}
 		str = ft_strdup(array[1]);
 		ft_var_declare(str);
 		free(str);

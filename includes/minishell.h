@@ -133,5 +133,6 @@ int			is_pipe(void);
 int			is_builtins(char **array);
 int			ft_dont_expand(char *str, int i);
 int			ft_return(int status, char *str);
+int			ft_get_state(char *str, int j);
 
 #endif

@@ -57,28 +57,27 @@ void	ft_add_var_exp(char *key, char *value)
 int	ft_var_declare_exp(char *str)
 {
 	int		i;
-	int		ward;
+	char	*str2;
 	char	*key;
 	char	*value;
-	char	aux;
 
+	str2 = ft_strdup(str);
 	i = 0;
-	while (str[i] && str[i] != '=')
+	while (str2[i] && str2[i] != '=')
 		i++;
-	if (str[i] != '=')
+	if (str2[i] != '=')
+	{
+		free(str2);
 		return (0);
-	aux = str[i];
-	str[i] = 0;
-	key = ft_strdup(str);
-	str[i] = aux;
-	ward = ++i;
-	while (str[i])
-		i++;
-	aux = str[i];
-	str[i] = 0;
-	value = ft_strdup(str + ward);
-	str[i] = aux;
+	}
+	if (!ft_isalpha(str[0]))
+		return (free(str2), 0);
+	str2[i] = 0;
+	key = ft_strdup(str2);
+	++i;
+	value = ft_remove_quotes(str2 + i);
 	ft_add_var_exp(key, value);
+	free(str2);
 	return (1);
 }
 

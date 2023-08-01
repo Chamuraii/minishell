@@ -378,6 +378,7 @@ could be executed right away (some builtins) */
 
 void	is_execve(int j)
 {
+	int i = 0;
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
 			|| ((ft_strcmp(g_all.commands[0], "export")) == 0
@@ -398,9 +399,15 @@ void	is_execve(int j)
 	{
 		if (is_pipe() == 1)
 			pipes(0);
-		else if (ft_strcmp(g_all.commands[0], "cd") != 0
-			&& ft_strcmp(g_all.commands[0], "exit") != 0)
-			pipes(1);
+		else if ((ft_strcmp(g_all.commands[0], "cd") != 0
+			&& ft_strcmp(g_all.commands[0], "exit") != 0)) {
+			if (((ft_strcmp(g_all.commands[0], "export")) == 0 && g_all.commands[1]))
+				i ++;
+//			else if ((ft_strcmp(g_all.commands[0], "export")) == 0 && !g_all.commands[1])
+//				pipes(1);
+			else
+				pipes(1);
+		}
 	}
 }
 

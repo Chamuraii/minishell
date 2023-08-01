@@ -43,24 +43,21 @@ char	*ft_expand(char **str)
 	return ((*str));
 }
 
-void	ft_reassign_2(char **str, int i)
+void	ft_reassign_2(char **str, int *i)
 {
-	while ((*str)[i])
+	while ((*str)[*i])
 	{
-		if ((*str)[i] == 20)
-			(*str)[i] = 32;
-		if ((*str)[0] != SQ)
+		if ((*str)[*i] == 20)
+			(*str)[*i] = 32;
+		if ((*str)[*i] == '$')
 		{
-			if ((*str)[i] == '$')
+			if (i && ft_get_state(*str, *i) != SQI)
 			{
-				if (!ft_dont_expand(*str, i))
-				{
-					*str = ft_expand(str);
-					i = -1;
-				}
+				*str = ft_expand(str);
+				*i = -1;
 			}
 		}
-		i++;
+		*i += 1;
 	}
 }
 
@@ -73,12 +70,12 @@ char	*ft_reassign(char **str, char **array, int cnt)
 		ft_change_str(str, ">");
 	if (!ft_strcmp((*str), "<>"))
 		ft_change_str(str, "<");
-	ft_reassign_2(str, i);
+	ft_reassign_2(str, &i);
 	if (!ft_is_p_or_r_between_quotes(*str) && !ft_quotes_jess(*str))
 		(*str) = ft_remove_quotes_2(str);
-	if (!array[i + 1] && cnt == 0)
-		ft_var_declare((*str));
-	return ((*str));
+	if (!array[cnt + 1] && cnt == 0)
+		ft_var_declare(*str);
+	return (*str);
 }
 
 char	**to_double_pointer(char **str)

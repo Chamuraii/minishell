@@ -70,6 +70,8 @@ int	ft_var_declare(char *str)
 		free(str2);
 		return (0);
 	}
+	if (!ft_isalpha(str[0]))
+		return (free(str2), 0);
 	str2[i] = 0;
 	key = ft_strdup(str2);
 	++i;

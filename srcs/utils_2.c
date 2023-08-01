@@ -72,12 +72,16 @@ int	ft_search_var(char *key)
 	return (0);
 }
 
-int	ft_dont_expand(char *str, int i)
+int	ft_get_state(char *str, int j)
 {
-	while (str[i] != '=' && str[i] && !ft_isspace(str[i]))
-		i++;
-	if (str[i] == '=')
-		return (1);
-	else
+	int	i;
+	int	state;
+
+	i = 0;
+	state = 0;
+	if (!str)
 		return (0);
+	while (i <= j && str[i])
+		state = ft_quote_state(str[i++], state);
+	return (state);
 }
