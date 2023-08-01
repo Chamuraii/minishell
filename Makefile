@@ -1,12 +1,10 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 OBJ_DIR = obj
-INCLUDE_DIRS = include -I libft -I /opt/homebrew/Cellar/readline/8.2.1/include
-LIBS =  -L libft -lreadline
 SYS = $(shell uname -s)
 ifeq ($(SYS), Darwin)
-INCLUDE_DIRS += -I /opt/vagrant/embedded/include
-LIBS    += -L/opt/vagrant/embedded/lib
+INCLUDE_DIRS = include -I libft -I /opt/homebrew/Cellar/readline/8.2.1/include -I /opt/vagrant/embedded/include
+LIBS    = -L libft -lreadline -L/opt/vagrant/embedded/lib
 endif
 SRC_FILES = srcs/builtins_2.c \
             srcs/builtins.c \
@@ -33,7 +31,7 @@ SRC_FILES = srcs/builtins_2.c \
             srcs/utils_2.c \
             srcs/utils.c \
             srcs/where.c
-OBJ_FILES = $(patsubst srcs/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
+OBJ_FILES = $(SRC_FILES:srcs/%.c=obj/%.o)
 LIBFT = libft/libft.a
 NAME = minishell
 .PHONY: all clean fclean re
