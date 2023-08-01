@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
-/*   Updated: 2023/08/01 15:12:09 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/08/01 19:49:40 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,20 @@ typedef struct s_all
 	char				**env;
 	struct s_varlist	**var_list;
 	struct s_varlist	**exported_list;
+	int					i;
+	int					j;
+	int					p[2];
+	int					size;
+	int					error;
+	char				*path;
+	int					infile;
+	int					outfile;
 	int					array_pos;
 	char				**commands;
 	char				**where;
-	char				*path;
-	int					infile;
 	int					is_infile;
-	int					outfile;
 	int					is_outfile;
-	int					error;
 	char				*eof_heredoc;
-	int					p[2];
-	int					i;
-	int					j;
-	int					size;
 	int					start_i;
 	int					end_i;
 }	t_all;
@@ -134,5 +134,45 @@ int			is_builtins(char **array);
 int			ft_dont_expand(char *str, int i);
 int			ft_return(int status, char *str);
 int			ft_get_state(char *str, int j);
+
+// execute.c
+
+void		pipe_child(int last);
+void		pipes(int last);
+void		builtin_now(int j);
+void		is_execve(int j);
+
+// heredoc.c
+
+void		write_heredoc(char *his);
+int			heredoc(int j);
+void		ptp_heredoc(int i);
+
+// pipe.c
+
+void		del_arg(int i, int h, int g, int k);
+int			is_pipe(void);
+void		args_fill(int i, int end, int j);
+void		split_pipe(void);
+
+// redirection.c
+
+void		ptp_infile(int i);
+void		ptp_outfile(int i);
+void		ptp_append(int i);
+void		redirections(int i, int end);
+
+// start_exit.c
+
+int			ft_exit(int status);
+int			ft_return(int status, char *str);
+void		free_fd(void);
+int			execute(void);
+
+// where.c
+
+char		*ft_strj(char *s1, char *s2);
+int			path(void);
+int			where(void);
 
 #endif
