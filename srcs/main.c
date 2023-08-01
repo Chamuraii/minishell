@@ -56,7 +56,7 @@ int	ft_readline(void)
 	if (ft_qvalidator(&(g_all.str)))
 		g_all.array = to_double_pointer(&(g_all.str));
 	else
-		return (free(g_all.str), g_all.error = 258);
+		return (free(g_all.str), free(str), g_all.error = 258);
 	execute();
 	int i = 0;
 	while (g_all.array[i])
@@ -65,8 +65,8 @@ int	ft_readline(void)
 		i++;
 	}
 	free(g_all.array);
-	free(str);
 	free(g_all.str);
+	free(str);
 	//system("leaks minishell");
 	return (0);
 }
