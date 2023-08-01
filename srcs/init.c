@@ -1,9 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
+/*   Updated: 2023/08/01 13:26:10 by jorgfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 extern t_all	g_all;
 
 void	ft_var_init(void)
 {
+	char	*exit_code;
+
 	g_all.str = 0;
 	g_all.i = 0;
 	g_all.env = 0;
@@ -17,8 +31,8 @@ void	ft_var_init(void)
 		exit(0);
 	}
 	g_all.var_list[0] = 0;
-	char *exit_code = ft_itoa(g_all.error);
-	ft_add_var(ft_strdup("?"), ft_strdup(exit_code)); ////// leak ?
+	exit_code = ft_itoa(g_all.error);
+	ft_add_var(ft_strdup("?"), ft_strdup(exit_code));
 	free(exit_code);
 	g_all.exported_list = (t_varlist **)malloc(sizeof(t_varlist *));
 	if (!g_all.exported_list)

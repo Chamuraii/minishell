@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
+/*   Updated: 2023/08/01 13:26:10 by jorgfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 extern t_all	g_all;
@@ -100,54 +112,4 @@ char	*ft_remove_quotes(char *str)
 			str2[++j] = str[i];
 	str2[i] = 0;
 	return (str2);
-}
-
-char	*ft_remove_quotes_2(char **str)
-{
-	int		i;
-	int		state;
-	char	*str2;
-	int		j;
-
-	state = 0;
-	i = 0;
-	j = 0;
-	while ((*str)[i])
-	{
-		state = ft_quote_state((*str)[i], state);
-		if (state == DQO || state == DQC || state == SQO || state == SQC)
-			(*str)[i] = 20;
-		else
-			j++;
-		i++;
-	}
-	str2 = (char *)malloc(sizeof(char) * (j + 1));
-	j = -1;
-	i = -1;
-	while ((*str)[++i])
-		if ((*str)[i] != 20)
-			str2[++j] = (*str)[i];
-	free(*str);
-	str2[++j] = 0;
-	return (str2);
-}
-
-int	ft_search_var(char *key)
-{
-	t_varlist	*head;
-
-	head = g_all.var_list[0];
-	if (!head)
-		return (0);
-	while (head)
-	{
-		if (!strcmp(key, head->key))
-		{
-			free(key);
-			return (1);
-		}
-		head = head->next;
-	}
-	free(key);
-	return (0);
 }

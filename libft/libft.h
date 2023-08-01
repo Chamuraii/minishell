@@ -91,7 +91,6 @@ int				ft_putptr_printf(unsigned long long num, char *base);
 int				ft_putstr_fd_printf(char *s, int fd);
 unsigned int	ft_putunbr_fd_printf(unsigned int n, int fd);
 char			*ft_strstr(char *s1, char *s2);
-char			*ft_strdetach(char *str, char *str2);
 
 char			*ft_nlsplit_gnl(char *buffer);
 char			*ft_next_line_gnl(char *buffer);

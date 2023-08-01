@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
+/*   Updated: 2023/08/01 13:41:12 by jorgfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 extern t_all	g_all;
@@ -36,81 +48,32 @@ int	ft_builtin_pwd(char **array)
 	return (1);
 }
 
-int	ft_didnt_expand_exp(char *str)
+int	ft_builtin_exit2(char **array, int j)
 {
-	char *str2;
-	char *str3;
-
-	str2 = ft_strdup(str);
-	str3 = ft_strstr(str2, "=");
-	*str3 = 0;
-	if (!str2)
-		return (0);
-	if (ft_strstr(str2, "$"))
-		return (free(str2), 1);
-	else
-		return (free(str2), 0);
-}
-
-int	ft_builtin_export(char *str, char **array, int i)
-{
-	t_varlist	*head;
-
-	if (!array[1])
+	if (array[2] && array[1])
 	{
-		head = g_all.exported_list[0];
-		while (head)
+		g_all.error = 1;
+		printf("exit: too many arguments\n");
+		return (1);
+	}
+	else if (array[1])
+	{
+		while (array[1][j])
 		{
-			printf("declare -x %s=%s\n", head->key, head->value);
-			head = head->next;
+			if (ft_isalpha(array[1][j]) == 1)
+			{
+				g_all.error = 1;
+				printf("exit: %s: numeric argument required\n", array[1]);
+				exit(g_all.error);
+			}
+			j ++;
 		}
-		return (1);
+		g_all.error = ft_atoi(array[1]);
 	}
-	if (i)
-		return (1);
-	while (ft_strcmp(g_all.array[i], "|") && g_all.array[i])
-		i++;
-	if (!ft_strcmp(g_all.array[i], "|"))
-		return (1);
-	if (ft_strstr(array[1], "="))
-	{
-		if (ft_didnt_expand_exp(array[1]))
-			return (1);
-		if (str[0] == '=')
-			return (1);
-		str = ft_strdup(array[1]);
-		ft_var_declare(str);
-		free(str);
-		str = ft_strdup(array[1]);
-		ft_var_declare_exp(str);
-		return (free(str), 1);
-	}
-	if (!ft_search_var(ft_strdup(array[1])))
-		return (1);
-	ft_add_var_exp(ft_strdup(array[1]), ft_get_var(array[1]));
-	return (1);
-}
-
-int	ft_builtin_unset(char *str, char **array, int i)
-{
-	if (!i || i == 2)
-	{
-		if (i == 2)
-			if (ft_strcmp(g_all.array[i - 2], "<"))
-				return (1);
-		while (ft_strcmp(g_all.array[i], "|") && g_all.array[i])
-			i++;
-		if (!ft_strcmp(g_all.array[i], "|"))
-			return (1);
-		str = array[1];
-		if (!str)
-			return (1);
-		if (!ft_strncmp(str, "PWD", ft_strlen("PWD")))
-			ft_add_var_exp(ft_strdup("OLDPWD"), ft_strdup(ft_get_var_exp("PWD")));
-		ft_del_var(ft_strdup(str));
-		return (1);
-	}
-	return (1);
+	else
+		g_all.error = 0;
+	ft_free("exit");
+	exit(g_all.error);
 }
 
 int	ft_builtin_exit(char **array, int i)
@@ -127,31 +90,9 @@ int	ft_builtin_exit(char **array, int i)
 			i++;
 		if (!ft_strcmp(g_all.array[i], "|"))
 			return (1);
-		else if (array[2] && array[1])
-		{
-			g_all.error = 1;
-			printf("exit: too many arguments\n");
-			return (1);
-		}
-		else if (array[1])
-		{
-			while (array[1][j])
-			{
-				if (ft_isalpha(array[1][j]) == 1)
-				{
-					g_all.error = 1;
-					printf("exit: %s: numeric argument required\n", array[1]);
-					exit(g_all.error);
-				}
-				j ++;
-			}
-			g_all.error = ft_atoi(array[1]);
-		}
 		else
-			g_all.error = 0;
-	//	printf("minishell exited with status: %d\n", g_all.error % 256);
-		ft_free("exit");
-		exit(g_all.error);
+			ft_builtin_exit2(array, j);
+		return (1);
 	}
 	else
 		return (1);
@@ -176,30 +117,5 @@ int	ft_builtins(char **array, int i)
 		return (ft_builtin_echo(array[0], array));
 	else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
 		ft_builtin_exit(&array[0], i);
-	return (0);
-}
-
-int	is_builtins(char **array)
-{
-	if (array[0])
-	{
-		if (!ft_strncmp(array[0], "env", ft_strlen("env") + 1)
-			|| !ft_strncmp(array[0], "ENV", ft_strlen("ENV") + 1))
-			return (1);
-		else if (!ft_strncmp(array[0], "pwd", ft_strlen("pwd") + 1)
-			|| !ft_strncmp(array[0], "PWD", ft_strlen("PWD") + 1))
-			return (1);
-		else if (!ft_strncmp(array[0], "export", ft_strlen("export") + 1))
-			return (1);
-		else if (!ft_strncmp(array[0], "unset", ft_strlen("unset") + 1))
-			return (1);
-		else if (!ft_strncmp(array[0], "cd", ft_strlen("cd") + 1))
-			return (1);
-		else if (!ft_strncmp(array[0], "echo", ft_strlen("echo") + 1)
-			|| !ft_strncmp(array[0], "ECHO", ft_strlen("ECHO") + 1))
-			return (1);
-		else if (!ft_strncmp(array[0], "exit", ft_strlen("exit") + 1))
-			return (1);
-	}
 	return (0);
 }

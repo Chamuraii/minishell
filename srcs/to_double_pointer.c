@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   to_double_pointer.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
+/*   Updated: 2023/08/01 13:26:10 by jorgfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 extern t_all	g_all;
@@ -15,7 +27,7 @@ char	*ft_expand(char **str)
 {
 	int		i;
 	char	*str2;
-	char 	*str3;
+	char	*str3;
 
 	i = 0;
 	while ((*str)[i] != '$')
@@ -31,25 +43,8 @@ char	*ft_expand(char **str)
 	return ((*str));
 }
 
-int	ft_dont_expand(char *str, int i)
+void	ft_reassign_2(char **str, int i)
 {
-	while (str[i] != '=' && str[i] && !ft_isspace(str[i]))
-		i++;
-	if (str[i] == '=')
-		return (1);
-	else
-		return (0);
-}
-
-char	*ft_reassign(char **str, char **array, int cnt)
-{
-	int		i;
-
-	i = 0;
-	if (!ft_strcmp((*str), ">|"))
-		ft_change_str(str, ">");
-	if (!ft_strcmp((*str), "<>"))
-		ft_change_str(str, "<");
 	while ((*str)[i])
 	{
 		if ((*str)[i] == 20)
@@ -67,6 +62,18 @@ char	*ft_reassign(char **str, char **array, int cnt)
 		}
 		i++;
 	}
+}
+
+char	*ft_reassign(char **str, char **array, int cnt)
+{
+	int		i;
+
+	i = 0;
+	if (!ft_strcmp((*str), ">|"))
+		ft_change_str(str, ">");
+	if (!ft_strcmp((*str), "<>"))
+		ft_change_str(str, "<");
+	ft_reassign_2(str, i);
 	if (!ft_is_p_or_r_between_quotes(*str) && !ft_quotes_jess(*str))
 		(*str) = ft_remove_quotes_2(str);
 	if (!array[i + 1] && cnt == 0)

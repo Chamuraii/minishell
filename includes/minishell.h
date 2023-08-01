@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
+/*   Updated: 2023/08/01 14:03:57 by jorgfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <stdio.h>
@@ -16,8 +28,6 @@
 # include <curses.h>
 # include <term.h>
 
-//hacer lista
-
 # define NQ		0
 
 # define DQ		34
@@ -30,24 +40,14 @@
 # define SQI	5
 # define SQC	6
 
-// TODO
-//  ------
-//  When pressing TAB, do nothing.			Mirar si hacerlo
-//  export doesnt redirect
-//  leaks
-//  norminette
-
-
 typedef struct s_all
 {
-	//parser
 	char				*str;
 	char				**array;
-	char				**env; //stack
+	char				**env;
 	struct s_varlist	**var_list;
 	struct s_varlist	**exported_list;
-	int 				array_pos;
-	//pipex
+	int					array_pos;
 	char				**commands;
 	char				**where;
 	char				*path;
@@ -134,5 +134,6 @@ int			ft_quotes_jess(char *str);
 int			is_pipe(void);
 int			is_builtins(char **array);
 int			ft_return(int status, char *str);
+int			ft_dont_expand(char *str, int i);
 
 #endif

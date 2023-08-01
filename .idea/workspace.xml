@@ -22,6 +22,28 @@
   <component name="ChangeListManager">
     <list default="true" id="8ed66ee3-847d-4f97-b11f-2a38c672c998" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/minishell.h" beforeDir="false" afterPath="$PROJECT_DIR$/includes/minishell.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libft/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/libft/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libft/ft_strdetach.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/libft/libft.h" beforeDir="false" afterPath="$PROJECT_DIR$/libft/libft.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/minishell.dSYM/Contents/Resources/DWARF/minishell" beforeDir="false" afterPath="$PROJECT_DIR$/minishell.dSYM/Contents/Resources/DWARF/minishell" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/builtins.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/builtins.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/cd.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/cd.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/echo.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/echo.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/expand.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/expand.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/export.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/export.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/ft_free.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/ft_free.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/pipe_redirect_separator.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/pipe_redirect_separator.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/pipe_redirect_separator_2.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/pipe_redirect_separator_2.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/qvalidate.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/qvalidate.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/rvalidate.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/rvalidate.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/rvalidate_2.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/rvalidate_2.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/signals.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/signals.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/to_double_pointer.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/to_double_pointer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/unset.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/unset.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srcs/utils.c" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/utils.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +82,11 @@
         </entry>
       </map>
     </option>
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -89,6 +116,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "ma.leet.ft_header.AppSettingsConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -113,11 +141,6 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Makefile Application.all" />
       <item itemvalue="Makefile Application.fclean" />
@@ -134,11 +157,16 @@
       <option name="presentableId" value="Default" />
       <updated>1690815366860</updated>
       <workItem from="1690815368005" duration="3386000" />
-      <workItem from="1690886609199" duration="4000" />
+      <workItem from="1690886609199" duration="3540000" />
+      <workItem from="1690890198653" duration="1579000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

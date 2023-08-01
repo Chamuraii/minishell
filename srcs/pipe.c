@@ -126,19 +126,56 @@ int	where(void)
 	return (127);
 }
 
-void	del_arg(int i, int j)
+void    del_arg(int i, int j)
 {
+	int     h;
+	int     g;
+	int     size;
+	char    **temp;
+	h = 0;
 	j ++;
-	while (g_all.array[i])
+	while (g_all.array[h])
+		h ++;
+	size = h - 1;
+	temp = ft_calloc(size, sizeof(char *));
+	g = 0;
+	h = 0;
+	while (g < i)
 	{
-		if (g_all.red == 0)
-			//free(g_all.array[i]);
-			printf("freeing %s\n", g_all.array[i]);
-		g_all.array[i] = g_all.array[i + 2];
-		i ++;
+		temp[g] = ft_strdup(g_all.array[g]);
+		g ++;
 	}
+	h = g;
+	g = h + 2;
+	while (g_all.array[g])
+	{
+		temp[h] = ft_strdup(g_all.array[g]);
+		h ++;
+		g ++;
+	}
+	g = 0;
+	while (g_all.array[g])
+	{
+		free(g_all.array[g]);
+		g ++;
+	}
+	free(g_all.array);
+	g_all.array = ft_calloc(size, sizeof(char *));
+	g = 0;
+	while (temp[g])
+	{
+		g_all.array[g] = ft_strdup(temp[g]);
+		g ++;
+	}
+	g = 0;
+	while (temp[g])
+	{
+		free(temp[g]);
+		g ++;
+	}
+	free(temp);
 	g_all.size -= 2;
-	g_all.red ++;
+	//system("leaks minishell");
 }
 
 void	ptp_infile(int i)
@@ -378,7 +415,6 @@ void	args_fill(int i, int end)
 	h = 0;
 	while (g_all.commands[h])
 	{
-		printf("free %s\n", g_all.commands[h]);
 		//if (ft_strcmp(g_all.commands[0], "cd") != 0)
 			free(g_all.commands[h]);
 		h ++;
