@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
-/*   Updated: 2023/08/01 13:41:12 by jorgfern         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:41:43 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	ft_builtin_exit2(char **array, int j)
 	{
 		while (array[1][j])
 		{
-			if (ft_isalpha(array[1][j]) == 1)
+			if (ft_isdigit(array[1][j]) != 1)
 			{
 				g_all.error = 1;
 				printf("exit: %s: numeric argument required\n", array[1]);
@@ -73,6 +73,7 @@ int	ft_builtin_exit2(char **array, int j)
 	else
 		g_all.error = 0;
 	ft_free("exit");
+	printf("exit\n");
 	exit(g_all.error);
 }
 

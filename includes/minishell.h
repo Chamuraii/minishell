@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
-/*   Updated: 2023/08/01 14:03:57 by jorgfern         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:12:09 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,9 @@ typedef struct s_all
 	int					is_outfile;
 	int					error;
 	char				*eof_heredoc;
-	int					pid;
 	int					p[2];
 	int					i;
 	int					j;
-	int					red;
 	int					size;
 	int					start_i;
 	int					end_i;
@@ -133,7 +131,7 @@ int			execute(void);
 int			ft_quotes_jess(char *str);
 int			is_pipe(void);
 int			is_builtins(char **array);
-int			ft_return(int status, char *str);
 int			ft_dont_expand(char *str, int i);
+int			ft_return(int status, char *str);
 
 #endif

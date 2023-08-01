@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jorgfern <jorgfern@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 13:26:10 by jorgfern          #+#    #+#             */
-/*   Updated: 2023/08/01 13:28:18 by jorgfern         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:44:02 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	ft_readline(void)
 	if (!g_all.str)
 	{
 		free(str);
-		printf("\nexit\n");
+		printf("exit\n");
 		exit(0);
 	}
 	if (g_all.str[0])
@@ -90,5 +90,8 @@ int	main(int argc, char **argv, char **env)
 	ft_var_init();
 	ft_init_env(env);
 	while (1)
+	{
 		ft_readline();
+		system ("leaks minishell");
+	}
 }

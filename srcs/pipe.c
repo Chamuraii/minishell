@@ -6,7 +6,7 @@
 /*   By: jchamak <jchamak@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 15:41:22 by jchamak           #+#    #+#             */
-/*   Updated: 2023/08/01 12:42:07 by jchamak          ###   ########.fr       */
+/*   Updated: 2023/08/01 17:05:57 by jchamak          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 extern t_all	g_all;
 void	split_pipe(void);
 void	redirections(int i, int end);
-void	args_fill(int i, int end);
+void	args_fill(int i, int end, int j);
+
+/* FT_EXIT : closes the child process if not closed by execve */
 
 int	ft_exit(int status)
 {
@@ -38,6 +40,8 @@ int	ft_exit(int status)
 	g_all.error = status;
 	exit (status);
 }
+
+/* FT_RETURN : prints ("execution") errors when needed */
 
 int	ft_return(int status, char *str)
 {
@@ -65,6 +69,8 @@ int	ft_return(int status, char *str)
 	return (status);
 }
 
+/* FT_STRJ : ft_strjoin with no free */
+
 char	*ft_strj(char *s1, char *s2)
 {
 	size_t	i;
@@ -88,6 +94,27 @@ char	*ft_strj(char *s1, char *s2)
 	str[i] = 0;
 	return (str);
 }
+
+/* PATH : tests if the argument recieved is already a valid path and calls
+ft_return to print if error 127 */
+
+int	path(void)
+{
+	if (access(g_all.commands[0], F_OK) == 0)
+	{
+		g_all.path = g_all.commands[0];
+		return (0);
+	}
+	if (g_all.commands[0])
+	{
+		if (!is_builtins(g_all.commands))
+			ft_return(127, g_all.commands[0]);
+	}
+	return (1);
+}
+
+/* WHERE : creates potential paths using env's PATH variable untils it finds 
+an accessible one */
 
 int	where(void)
 {
@@ -113,33 +140,17 @@ int	where(void)
 		}
 		i ++;
 	}
-	if (access(g_all.commands[0], F_OK) == 0)
-	{
-		g_all.path = g_all.commands[0];
-		return (0);
-	}
-	if (g_all.commands[0])
-	{
-		if (!is_builtins(g_all.commands))
-			ft_return(127, g_all.commands[0]);
-	}
+	path();
 	return (127);
 }
 
-void    del_arg(int i, int j)
+/* DEL_ARG : removes redirection signs and names from g_all.array */
+
+void	del_arg(int i, int h, int g, int k)
 {
-	int     h;
-	int     g;
-	int     size;
-	char    **temp;
-	h = 0;
-	j ++;
-	while (g_all.array[h])
-		h ++;
-	size = h - 1;
-	temp = ft_calloc(size, sizeof(char *));
-	g = 0;
-	h = 0;
+	char	**temp;
+
+	temp = ft_calloc(k, sizeof(char *));
 	while (g < i)
 	{
 		temp[g] = ft_strdup(g_all.array[g]);
@@ -148,85 +159,97 @@ void    del_arg(int i, int j)
 	h = g;
 	g = h + 2;
 	while (g_all.array[g])
-	{
-		temp[h] = ft_strdup(g_all.array[g]);
-		h ++;
-		g ++;
-	}
+		temp[h ++] = ft_strdup(g_all.array[g ++]);
 	g = 0;
 	while (g_all.array[g])
-	{
-		free(g_all.array[g]);
-		g ++;
-	}
+		free(g_all.array[g ++]);
 	free(g_all.array);
-	g_all.array = ft_calloc(size, sizeof(char *));
+	g_all.array = ft_calloc(k, sizeof(char *));
 	g = 0;
 	while (temp[g])
 	{
 		g_all.array[g] = ft_strdup(temp[g]);
-		g ++;
-	}
-	g = 0;
-	while (temp[g])
-	{
-		free(temp[g]);
-		g ++;
+		free(temp[g ++]);
 	}
 	free(temp);
 	g_all.size -= 2;
-	//system("leaks minishell");
 }
+
+/* PTP_INFILE : stores infile name and opens the fd in question, returns if
+infile nonexistent */
 
 void	ptp_infile(int i)
 {
+	int	h;
+
+	h = 0;
 	g_all.is_infile = 1;
 	g_all.infile = open (g_all.array[i + 1], O_RDONLY, 0644);
 	if (g_all.infile <= 0)
 	{
 		g_all.infile = 0;
 		ft_return(errno, NULL);
-		del_arg(i, 0);
 	}
-	else
-		del_arg(i, 1);
+	while (g_all.array[h])
+		h ++;
+	del_arg(i, h, 0, h - 1);
 }
+
+/* PTP_OUTFILE : stores outfile name and opens the fd in question, creates it
+necessary */
 
 void	ptp_outfile(int i)
 {
+	int	h;
+
+	h = 0;
 	g_all.is_outfile = 1;
 	g_all.outfile = open (g_all.array[i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (g_all.outfile <= 0)
 	{
 		g_all.outfile = 0;
 		ft_return(errno, NULL);
-		del_arg(i, 0);
 	}
-	else
-		del_arg(i, 1);
+	while (g_all.array[h])
+		h ++;
+	del_arg(i, h, 0, h - 1);
 }
+
+/* PTP_APPEND : stores outfile name and opens in append mode the fd in question,
+creates it if necessary */
 
 void	ptp_append(int i)
 {
+	int	h;
+
+	h = 0;
 	g_all.is_outfile = 1;
 	g_all.outfile = open (g_all.array[i + 1],
 			O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (g_all.outfile <= 0)
-	{
 		ft_return(errno, NULL);
-		del_arg(i, 0);
-	}
-	else
-		del_arg(i, 1);
+	while (g_all.array[h])
+		h ++;
+	del_arg(i, h, 0, h - 1);
 }
 
-int	heredoc(void)
+/* WRITE_HEREDOC : writes in the right fd when inside a heredoc */
+
+void	write_heredoc(char *his)
 {
-	int		j;
+	if (g_all.outfile)
+		write(g_all.outfile, his, ft_strlen(his));
+	else
+		write(g_all.p[1], his, ft_strlen(his));
+	write(g_all.p[1], "\n", 1);
+}
+
+/* HEREDOC : recreates bash's heredoc, reads until eof string */
+
+int	heredoc(int j)
+{
 	char	*his;
 
-	j = 0;
-	pipe(g_all.p);
 	while (j == 0)
 	{
 		dup2(1, 0);
@@ -237,66 +260,78 @@ int	heredoc(void)
 			close(g_all.p[1]);
 			return (-1);
 		}
-		if (strcmp (his, g_all.eof_heredoc) == 0 && his)
+		if (ft_strcmp (his, g_all.eof_heredoc) == 0 && his)
 		{
 			dup2(g_all.p[0], 0);
-			//close(g_all.p[1]);
 			j ++;
 		}
 		else if (his)
-		{
-			if (g_all.outfile)
-			{
-				write(g_all.outfile, his, ft_strlen(his));
-				write(g_all.outfile, "\n", 1);
-			}
-			else
-			{
-				write(g_all.p[1], his, ft_strlen(his));
-				write(g_all.p[1], "\n", 1);
-			}
-		}
+			write_heredoc(his);
 		free(his);
 	}
-	close(g_all.p[1]);
 	return (0);
 }
 
+/* PTP_HEREDOC : stores heredocs's eof string */
+
 void	ptp_heredoc(int i)
 {
+	int	h;
+
+	h = 0;
 	g_all.eof_heredoc = g_all.array[i + 1];
-	heredoc();
-	del_arg(i, 1);
+	pipe(g_all.p);
+	heredoc(0);
+	close(g_all.p[1]);
+	while (g_all.array[h])
+		h ++;
+	del_arg(i, h, 0, h - 1);
 }
 
-void	free_pipe(void)
-{
-	int	i;
+/* FREE_FD : deletes fd names for next pipe */
 
-	i = 0;
+void	free_fd(void)
+{
 	g_all.infile = 0;
 	g_all.is_infile = 0;
 	g_all.outfile = 0;
 	g_all.is_outfile = 0;
-/* 	if (g_all.commands)
-	{
-		while(g_all.commands[i])
-		{
-			free(g_all.commands[i]);
-			i ++;
-		}
-		free(g_all.commands);
-	} */
-/* 	if (g_all.path)
-		free(g_all.path); */
-//	g_all.commands = NULL;
 }
+
+/* PIPE_CHILD : child process where is called execve and some builtins */
+
+void	pipe_child(int last)
+{
+	int	i;
+
+	i = 0;
+	close(g_all.p[0]);
+	if (g_all.infile > 0)
+		dup2(g_all.infile, 0);
+	if (last == 0)
+		dup2(g_all.p[1], 1);
+	if (g_all.outfile > 0)
+		dup2(g_all.outfile, 1);
+	i = ft_builtins(g_all.commands, g_all.array_pos);
+	if (i == 0)
+		execve(g_all.path, (char *const *) g_all.commands, g_all.env);
+	dup2(0, 1);
+	if (errno == 13)
+		ft_exit(126);
+	else if (i == 1)
+		exit (0);
+	else
+		exit(127);
+}
+
+/* PIPES : contains the parent process, retrieves the child's exit code used
+in $? */
 
 void	pipes(int last)
 {
-	int	i;
-	int	j;
-	int	exit_status;
+	int		j;
+	int		exit_status;
+	char	*exit_code;
 
 	pipe(g_all.p);
 	ft_add_var(ft_strdup("?"), ft_strdup("0"));
@@ -304,46 +339,23 @@ void	pipes(int last)
 	if (j == -1)
 		ft_return(errno, NULL);
 	else if (j == 0)
-	{
-		close(g_all.p[0]);
-		if (g_all.infile > 0)
-			dup2(g_all.infile, 0);
-		if (last == 0)
-			dup2(g_all.p[1], 1);
-		if (g_all.outfile > 0)
-			dup2(g_all.outfile, 1);
-		i = ft_builtins(g_all.commands, g_all.array_pos);
-		if (i == 0)
-			execve(g_all.path, (char *const *) g_all.commands, g_all.env);
-		dup2(0, 1);
-		if (errno == 13)
-			ft_exit(126);
-		else if (i == 1)
-			exit (0);
-		else
-			exit(127);
-	}	
+		pipe_child(last);
 	else
 	{
 		close(g_all.p[1]);
 		dup2(g_all.p[0], 0);
 		waitpid(j, &exit_status, 0);
-/* 		int h = 0;
-		while (g_all.where[h])
-		{
-			free(g_all.where[h]);
-			h ++;
-		}
-		free(g_all.where); */
-		char *exit_code = ft_itoa(WEXITSTATUS(exit_status));
+		exit_code = ft_itoa(WEXITSTATUS(exit_status));
 		ft_add_var(ft_strdup("?"), ft_strdup(exit_code));
 		free(exit_code);
 	}
-	free_pipe();
-//	close(g_all.p[0]);
+	free_fd();
 	if (last == 1)
 		dup2(1, 0);
 }
+
+/* IS_PIPE : returns one if the actual pipe isn't the last one, used to know
+which dup2 use in the fork (pipe side or stdout/outfile) */
 
 int	is_pipe(void)
 {
@@ -361,25 +373,11 @@ int	is_pipe(void)
 	return (0);
 }
 
-void	args_fill(int i, int end)
-{
-	int	j;
+/* IS_EXECVE : determines if commands needs to be executed in child process or
+could be executed right away (some builtins) */
 
-	j = 0;
-	g_all.array_pos = i;
-	//system("leaks minishell");
-	g_all.commands = ft_calloc(end - i + 1, sizeof(char *));
-	while (i < end)
-	{
-		g_all.commands[j] = ft_strdup(g_all.array[i]);
-		if (ft_is_p_or_r_between_quotes(g_all.commands[j])
-			|| ft_quotes_jess(g_all.commands[j]))
-			ft_remove_quotes(g_all.commands[j]);
-		i ++;
-		j ++;
-	}
-	g_all.commands[j] = 0; // ?
-	//system("leaks minishell");
+void	is_execve(int j)
+{
 	where();
 	if (((ft_strcmp(g_all.commands[0], "exit") == 0)
 			|| ((ft_strcmp(g_all.commands[0], "export")) == 0
@@ -393,7 +391,6 @@ void	args_fill(int i, int end)
 		ft_builtins(g_all.commands, g_all.array_pos);
 		ft_add_var(ft_strdup("?"), ft_strdup("0"));
 	}
-	//system("leaks minishell");
 	if (((g_all.is_outfile == 0 && g_all.outfile == 0)
 			|| (g_all.is_outfile == 1 && g_all.outfile > 0))
 		&& ((g_all.is_infile == 0 && g_all.infile == 0)
@@ -405,34 +402,45 @@ void	args_fill(int i, int end)
 			&& ft_strcmp(g_all.commands[0], "exit") != 0)
 			pipes(1);
 	}
-	int h = 0;
-	while (g_all.where[h])
+}
+
+/* ARGS_FILL : fills commands array with only the ongoing pipe, frees
+afterwards */
+
+void	args_fill(int i, int end, int j)
+{
+	g_all.array_pos = i;
+	g_all.commands = ft_calloc(end - i + 1, sizeof(char *));
+	while (i < end)
 	{
-		free(g_all.where[h]);
-		h ++;
+		g_all.commands[j] = ft_strdup(g_all.array[i]);
+		if (ft_is_p_or_r_between_quotes(g_all.commands[j])
+			|| ft_quotes_jess(g_all.commands[j]))
+			ft_remove_quotes(g_all.commands[j]);
+		i ++;
+		j ++;
 	}
+	g_all.commands[j] = 0;
+	is_execve(j);
+	j = 0;
+	while (g_all.where[j])
+		free(g_all.where[j ++]);
 	free(g_all.where);
-	h = 0;
-	while (g_all.commands[h])
-	{
-		//if (ft_strcmp(g_all.commands[0], "cd") != 0)
-			free(g_all.commands[h]);
-		h ++;
-	}
-//	if (ft_strcmp(g_all.commands[0], "cd") == 0)
-	//	free(g_all.commands[0]);
+	j = 0;
+	while (g_all.commands[j])
+		free(g_all.commands[j ++]);
 	free(g_all.commands);
-	free_pipe();
+	free_fd();
 	g_all.size ++;
 	if (g_all.array[g_all.size])
 		split_pipe();
-//	system("leaks minishell");
 }
+
+/* REDIRECTIONS : checks if redirections in ongoing pipe */
 
 void	redirections(int i, int end)
 {
 	g_all.size = end;
-	//free_pipe();
 	while (i < g_all.size)
 	{
 		if (ft_strncmp(g_all.array[i], "<<", 2) == 0)
@@ -446,13 +454,13 @@ void	redirections(int i, int end)
 		else
 			i ++;
 	}
-//	system("leaks minishell");
 	if (g_all.array[g_all.size + 1])
-		args_fill(g_all.start_i, g_all.size);
+		args_fill(g_all.start_i, g_all.size, 0);
 	else if (g_all.array[0])
-		args_fill(g_all.start_i, g_all.size + 1);
-//	system("leaks minishell");
+		args_fill(g_all.start_i, g_all.size + 1, 0);
 }
+
+/* SPLIT_PIPE : finds the end position of each pipe */
 
 void	split_pipe(void)
 {
@@ -464,21 +472,19 @@ void	split_pipe(void)
 	redirections(g_all.start_i, g_all.size - 1);
 }
 
-int execute(void)
+/* EXECUTE : initializes and checks if there is a command to execute */
+
+int	execute(void)
 {
-	//system("leaks minishell");
 	if (!g_all.array[0])
 		return (0);
 	g_all.i = 0;
 	g_all.j = 0;
-	g_all.red = 0;
 	g_all.error = 0;
 	g_all.start_i = 0;
 	g_all.end_i = 0;
 	g_all.size = 0;
 	dup2(0, 1);
 	split_pipe();
-	//system("leaks minishell");
-	//free(g_all.commands);
 	return (1);
 }
