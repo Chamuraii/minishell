@@ -25,9 +25,8 @@ int	ft_builtin_cd(char *str, char **array, int i)
 		if (chdir(str) < 0)
 		{
 			printf("cd: %s: %s\n", strerror(errno), str);
-			return (free(str), 1);
+			return (1);
 		}
-		free(str);
 		str = ft_get_var("PWD");
 		str2 = ft_get_var("OLDPWD");
 		if (ft_strcmp(str, str2))

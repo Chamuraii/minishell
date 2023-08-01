@@ -25,8 +25,11 @@ int	ft_builtin_pwd(char **array)
 	if (array[0])
 	{
 		pwd = ft_get_var_exp("PWD");
-		if (!pwd)
+		if (!ft_strcmp(pwd, ""))
+		{
+			free(pwd);
 			pwd = ft_get_var_exp("OLDPWD");
+		}
 		printf("%s\n", pwd);
 		free(pwd);
 	}
@@ -43,8 +46,6 @@ int	ft_didnt_expand_exp(char *str)
 	*str3 = 0;
 	if (!str2)
 		return (0);
-	if (!str3)
-		return (free(str2), 0);
 	if (ft_strstr(str2, "$"))
 		return (free(str2), 1);
 	else
