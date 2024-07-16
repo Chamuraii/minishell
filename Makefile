@@ -1,64 +1,112 @@
-# COLORS
-GREEN = \033[0;32m
-RED = \033[0;31m
-RESET = \033[0m
+NAME	=	minishell
 
-CC = cc
-CFLAGS = -Wall -Werror -Wextra
-LIBFT_PATH = libft
-# Add any other static library in the same fashion - 1
+CC		=	gcc
 
-# TODO: reorganize the Makefile and the folder structure
-# INCLUDE: .h files or .a library folders
-# SRC: .c files
-SRC_DIR = srcs
-OBJ_DIR = obj
-INCLUDE_DIRS = include -I $(LIBFT_PATH) -I /opt/homebrew/Cellar/readline/8.2.1/include
-LIBS =  -L$(LIBFT_PATH) -lreadline
+FLAGS	=	-Wall -Werror -Wextra -g
 
-SYS	= $(shell uname -s)
-
+SYS = $(shell uname -s)
 ifeq ($(SYS), Darwin)
-INCLUDE_DIRS +=	-I /opt/vagrant/embedded/include
-LIBS	+= -L/opt/vagrant/embedded/lib
+EXTERNAL_INCLUDES = -Iinclude -I libft -I /opt/homebrew/Cellar/readline/8.2.1/include -I /opt/vagrant/embedded/include
+EXTERNAL_LIBS	= -L libft -lreadline -L/opt/vagrant/embedded/lib
+endif
+ifeq ($(SYS), Linux)
+EXTERNAL_INCLUDES = -Iinclude -I libft -I /usr/include/readline
+EXTERNAL_LIBS	= -L libft -lreadline -L /usr/lib
 endif
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
+#directories
+SRC_DIR					=	src/
+OBJ_DIR					=	obj/
+INC_DIR					=	include/
+LIBFT_DIR				=	libft/
+CURRENT_PATH			=	$(shell pwd)
+CURRENT_DIRECTORY_NAME	=	$(shell basename $(CURRENT_PATH))
+CURRENT_DIRECTORY		:=	./$(CURRENT_DIRECTORY_NAME)
 
-LIBFT = $(LIBFT_PATH)/libft.a
-# Add any other static library in the same fashion - 2
+#controll codes
+RESET			=	\033[0m
+GREEN			=	\033[32m
+YELLOW			=	\033[33m
+BLUE			=	\033[34m
+RED				=	\033[31m
+UP				=	\033[A
+CUT				=	\033[K
 
-NAME = minishell
+#source files
+SRC_FILES = builtins_2.c \
+			builtins.c \
+			cd.c \
+			echo.c \
+			execute.c \
+			expand.c \
+			export.c \
+			ft_free.c \
+			heredoc.c \
+			init.c \
+			main.c \
+			pipe_redirect_separator_2.c \
+			pipe_redirect_separator.c \
+			pipe.c \
+			qvalidate.c \
+			redirection.c \
+			rvalidate_2.c \
+			rvalidate.c \
+			signals.c \
+			start_exit.c \
+			to_double_pointer.c \
+			unset.c \
+			utils_2.c \
+			utils.c \
+			where.c
 
-.PHONY: all clean fclean re
+OBJ_FILES	=	$(SRC_FILES:.c=.o)
 
-all: $(NAME)
+#paths
+SRC 		=	$(addprefix $(SRC_DIR), $(SRC_FILES))
+OBJ 		=	$(addprefix $(OBJ_DIR), $(OBJ_FILES))
+LIBFT		=	$(addprefix $(LIBFT_DIR), libft.a)
 
-$(NAME): $(OBJ_FILES) $(LIBFT)
-	@$(CC) $(CFLAGS) $(LIBS) -o $@ $^
-	@echo "$(GREEN)+ $(NAME)$(RESET)"
-# Add any other static library in the same fashion as $(LIBFT) AND -I$(LIBFT_PATH) - 3
-
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -I $(INCLUDE_DIRS) -c -o $@ $<
-# Add any other static library in the same fashion as -I$(LIBFT_PATH) - 4
+all: $(LIBFT) $(NAME) 
 
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_PATH)
-# Add any other static library in the same fashion - 5
+	@$(MAKE) -C $(LIBFT_DIR)
 
+#compile the executable
+$(NAME): $(OBJ)
+	@echo "$(YELLOW)Compiling [$(NAME)]...$(RESET)"
+	@$(CC) $(FLAGS) $(OBJ) $(LIBFT) $(EXTERNAL_LIBS) -o $(NAME)
+	@echo "$(GREEN)Finished [$(NAME)]$(RESET)"
+
+#compile objects
+$(OBJ_DIR)%.o:$(SRC_DIR)%.c
+	@mkdir -p $(OBJ_DIR)
+	@echo "$(YELLOW)Compiling [$@]...$(RESET)"
+	@$(CC) $(FLAGS) -I $(INC_DIR) -I $(EXTERNAL_INCLUDES) -o $@ -c $<
+	@printf "$(UP)$(CUT)"
+	@echo "$(GREEN)Finished [$@]$(RESET)"
+	@printf "$(UP)$(CUT)"
+
+
+#clean rule
 clean:
-	@$(MAKE) -C $(LIBFT_PATH) clean
-# Add any other static library in the same fashion - 6
-	@$(RM) -r $(OBJ_DIR)
+	$(MAKE) -C libft clean
+	@if [ -d "$(OBJ_DIR)" ]; then \
+	rm -rf $(OBJ_DIR); \
+	echo "$(BLUE)Deleting all objects from $(CURRENT_DIRECTORY)...$(RESET)"; else \
+	echo "No objects to remove from $(CURRENT_DIRECTORY)."; \
+	fi;
 
+#fclean rule
 fclean: clean
-	@$(MAKE) -C $(LIBFT_PATH) fclean
-	@$(RM) $(NAME)
-	@echo "$(RED)- $(NAME)$(RESET)"
-# Add any other static library in the same fashion - 7
+	$(MAKE) -C libft fclean
+	@if [ -f "$(NAME)" ]; then \
+	rm -f $(NAME); \
+	echo "$(BLUE)Deleting $(RED)$(NAME)$(BLUE) binary from $(CURRENT_DIRECTORY)$(RESET)"; else \
+	echo "No Executable to remove from $(CURRENT_DIRECTORY)."; \
+	fi;
 
+#re rule
 re: fclean all
+
+#phony
+.PHONY: all clean fclean re
