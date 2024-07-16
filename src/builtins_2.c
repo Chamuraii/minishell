@@ -14,19 +14,6 @@
 
 extern t_all	g_all;
 
-void ft_print_array(char **array)
-{
-	int i = 0;
-
-	if (!array)
-	{
-		printf("Empty array!");
-		return ;
-	}
-	while (array[i])
-		printf("%s", array[i++]);
-}
-
 int	is_builtins(char **array)
 {
 	if (array[0])
